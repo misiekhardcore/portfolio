@@ -1,6 +1,6 @@
 import { NotFoundPage } from '@payloadcms/next/views'
 import configPromise from '@payload-config'
-import type { ImportMap } from 'payload'
+import { importMap } from './importMap.js'
 
 type Args = {
   params: Promise<{ segments: string[] }>
@@ -8,8 +8,6 @@ type Args = {
 }
 
 const Page = async ({ params, searchParams }: Args) => {
-  const config = await configPromise
-  const importMap: ImportMap = config.admin?.importMap ?? { baseDir: process.cwd() }
   return <NotFoundPage config={configPromise} importMap={importMap} params={params} searchParams={searchParams} />
 }
 
