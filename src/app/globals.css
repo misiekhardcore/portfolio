@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-wood-50: #faf6f1;
+  --color-wood-100: #f0e8dc;
+  --color-wood-200: #e0cdb3;
+  --color-wood-300: #c9a87c;
+  --color-wood-400: #b08968;
+  --color-wood-500: #8b6f4a;
+  --color-wood-600: #6b4f32;
+  --color-wood-700: #4a3422;
+  --color-wood-800: #2c1e12;
+  --color-wood-900: #1a100a;
+
+  --color-accent: #c9773a;
+  --color-accent-dark: #a85d2a;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --animate-fade-in: fade-in 0.6s ease-out;
+  --animate-slide-up: slide-up 0.6s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
