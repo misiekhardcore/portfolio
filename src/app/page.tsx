@@ -2,6 +2,8 @@ import { Section } from "@/components/section";
 import { ServiceCard } from "@/components/service-card";
 import { ProjectCard } from "@/components/project-card";
 import Link from "next/link";
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
 const services = [
   {
@@ -63,28 +65,14 @@ const services = [
   },
 ];
 
-const featuredProjects = [
-  {
-    title: "Oak & Steel Kitchen",
-    category: "Kitchen Renovation",
-    slug: "oak-steel-kitchen",
-    image: "/projects/kitchen-placeholder.jpg",
-  },
-  {
-    title: "Herringbone Deck",
-    category: "Decking",
-    slug: "herringbone-deck",
-    image: "/projects/deck-placeholder.jpg",
-  },
-  {
-    title: "Floor-to-Ceiling Library",
-    category: "Custom Furniture",
-    slug: "library-wall",
-    image: "/projects/library-placeholder.jpg",
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const payload = await getPayload({ config })
+  const { docs: featuredProjects } = await payload.find({
+    collection: 'projects',
+    where: { featured: { equals: true } },
+    sort: '-completedAt',
+    limit: 3,
+  })
   return (
     <>
       {/* Hero */}
@@ -137,8 +125,14 @@ export default function Home() {
         className="bg-white"
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((proj) => (
-            <ProjectCard key={proj.slug} {...proj} />
+          {featuredProjects.map((proj: any) => (
+            <ProjectCard
+              key={proj.id}
+              title={proj.title}
+              category={proj.category}
+              slug={proj.slug}
+              image={proj.thumbnail?.url ?? proj.images?.[0]?.url ?? ''}
+            />
           ))}
         </div>
         <div className="mt-10 text-center">

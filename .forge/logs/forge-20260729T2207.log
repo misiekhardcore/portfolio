@@ -1,0 +1,16 @@
+{"timestamp":"2026-07-29T22:07:48.184Z","level":"info","message":"Loading flow","data":{"name":"flow","filepath":"/home/michal/Projects/feature-forge/packages/cli/src/flows/implement/flow.json"}}
+{"timestamp":"2026-07-29T22:07:48.185Z","level":"info","message":"Loading flow","data":{"name":"flow","filepath":"/home/michal/Projects/feature-forge/packages/cli/src/flows/implement/flow.json"}}
+{"timestamp":"2026-07-29T22:07:48.195Z","level":"info","message":"Flow loaded successfully","data":{"name":"flow"}}
+{"timestamp":"2026-07-29T22:07:48.196Z","level":"info","message":"Flow loaded successfully","data":{"name":"flow"}}
+{"timestamp":"2026-07-29T22:07:48.200Z","level":"info","message":"Loading flow","data":{"name":"flow","filepath":"/home/michal/Projects/feature-forge/packages/cli/src/flows/review/flow.json"}}
+{"timestamp":"2026-07-29T22:07:48.200Z","level":"info","message":"Loading flow","data":{"name":"flow","filepath":"/home/michal/Projects/feature-forge/packages/cli/src/flows/review/flow.json"}}
+{"timestamp":"2026-07-29T22:07:48.202Z","level":"info","message":"Flow loaded successfully","data":{"name":"flow"}}
+{"timestamp":"2026-07-29T22:07:48.202Z","level":"info","message":"Flow loaded successfully","data":{"name":"flow"}}
+{"timestamp":"2026-07-29T22:07:48.203Z","level":"warn","message":"[feature-forge] Failed to register set_flow_param","data":{"error":{}}}
+{"timestamp":"2026-07-29T22:07:48.203Z","level":"warn","message":"[feature-forge] Failed to register set_flow_param","data":{"error":{}}}
+{"timestamp":"2026-07-29T22:07:48.204Z","level":"info","message":"Loading flow","data":{"name":"flow","filepath":"/home/michal/Projects/feature-forge/packages/cli/src/flows/verify/flow.json"}}
+{"timestamp":"2026-07-29T22:07:48.204Z","level":"info","message":"Loading flow","data":{"name":"flow","filepath":"/home/michal/Projects/feature-forge/packages/cli/src/flows/verify/flow.json"}}
+{"timestamp":"2026-07-29T22:07:48.205Z","level":"info","message":"Flow loaded successfully","data":{"name":"flow"}}
+{"timestamp":"2026-07-29T22:07:48.205Z","level":"info","message":"Flow loaded successfully","data":{"name":"flow"}}
+{"timestamp":"2026-07-29T22:07:48.206Z","level":"warn","message":"[feature-forge] Failed to register set_flow_param","data":{"error":{}}}
+{"timestamp":"2026-07-29T22:07:48.206Z","level":"warn","message":"[feature-forge] Failed to register set_flow_param","data":{"error":{}}}

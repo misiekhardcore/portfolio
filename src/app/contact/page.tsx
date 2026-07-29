@@ -1,6 +1,11 @@
 import { Section } from "@/components/section";
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const payload = await getPayload({ config })
+  const siteSettings = await payload.findGlobal({ slug: 'site-settings' }) as any
+
   return (
     <Section
       title="Get in touch"
@@ -54,15 +59,15 @@ export default function ContactPage() {
         <div className="space-y-6 text-wood-600 text-sm leading-relaxed">
           <div>
             <h3 className="font-semibold text-wood-800 mb-1">Email</h3>
-            <p>hello@yourcompany.com</p>
+            <p>{siteSettings.email ?? 'hello@yourcompany.com'}</p>
           </div>
           <div>
             <h3 className="font-semibold text-wood-800 mb-1">Phone</h3>
-            <p>+48 123 456 789</p>
+            <p>{siteSettings.phone ?? '+48 123 456 789'}</p>
           </div>
           <div>
             <h3 className="font-semibold text-wood-800 mb-1">Location</h3>
-            <p>Warsaw, Poland</p>
+            <p>{siteSettings.location ?? 'Warsaw, Poland'}</p>
           </div>
         </div>
       </div>
