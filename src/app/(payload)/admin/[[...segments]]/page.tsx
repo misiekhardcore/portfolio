@@ -1,5 +1,5 @@
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
-import config from '@payload-config'
+import configPromise from '@payload-config'
 import type { ImportMap } from 'payload'
 
 export { generatePageMetadata }
@@ -10,9 +10,9 @@ type Args = {
 }
 
 const Page = async ({ params, searchParams }: Args) => {
-  const resolvedConfig = await config
-  const importMap: ImportMap = resolvedConfig.admin?.importMap ?? { baseDir: process.cwd() }
-  return <RootPage config={config} importMap={importMap} params={params} searchParams={searchParams} />
+  const config = await configPromise
+  const importMap: ImportMap = config.admin?.importMap ?? { baseDir: process.cwd() }
+  return <RootPage config={configPromise} importMap={importMap} params={params} searchParams={searchParams} />
 }
 
 export default Page
