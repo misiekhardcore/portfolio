@@ -1,54 +1,18 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Section } from "@/components/section";
+import { ProjectImage } from "@/components/project-image";
+import { RichText } from "@/components/rich-text";
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
-interface Project {
-  title: string;
-  category: string;
-  description: string;
-  image: string;
-  details: { label: string; value: string }[];
+const categoryLabels: Record<string, string> = {
+  'kitchen-renovation': 'Kitchen Renovation',
+  'decking-outdoor': 'Decking & Outdoor',
+  'custom-furniture': 'Custom Furniture',
+  'interior-fit-outs': 'Interior Fit-outs',
+  'other': 'Other',
 }
-
-const projects: Record<string, Project> = {
-  "oak-steel-kitchen": {
-    title: "Oak & Steel Kitchen",
-    category: "Kitchen Renovation",
-    description:
-      "A complete kitchen transformation in a 1930s villa. We removed three walls to create an open-plan space, installed bespoke oak cabinetry with matte black steel frames, and laid herringbone parquet flooring throughout.",
-    image: "/projects/kitchen-placeholder.jpg",
-    details: [
-      { label: "Duration", value: "6 weeks" },
-      { label: "Location", value: "Warsaw, Mokotów" },
-      { label: "Materials", value: "European oak, powder-coated steel, quartz countertop" },
-    ],
-  },
-  "herringbone-deck": {
-    title: "Herringbone Deck",
-    category: "Decking",
-    description:
-      "A 45 m² outdoor deck laid in a herringbone pattern using thermally modified ash. Integrated bench seating, planter boxes, and subtle LED step lighting complete the space.",
-    image: "/projects/deck-placeholder.jpg",
-    details: [
-      { label: "Duration", value: "3 weeks" },
-      { label: "Location", value: "Warsaw, Wilanów" },
-      { label: "Materials", value: "Thermo-ash decking, stainless steel fixings" },
-    ],
-  },
-  "library-wall": {
-    title: "Floor-to-Ceiling Library",
-    category: "Custom Furniture",
-    description:
-      "A full-wall fitted library spanning 5 metres wide and 2.8 metres tall. Solid walnut shelving with integrated LED strip lighting, a rolling ladder, and a hidden cabinet for AV equipment.",
-    image: "/projects/library-placeholder.jpg",
-    details: [
-      { label: "Duration", value: "4 weeks" },
-      { label: "Location", value: "Warsaw, Żoliborz" },
-      { label: "Materials", value: "American black walnut, brass hardware" },
-    ],
-  },
-};
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -56,11 +20,18 @@ interface PageProps {
 
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
-  const project = projects[slug];
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'projects',
+    where: { slug: { equals: slug } },
+  })
 
-  if (!project) {
+  if (docs.length === 0) {
     notFound();
   }
+
+  const project = docs[0] as any
+  const mainImage = project.thumbnail?.url ?? project.images?.[0]?.url
 
   return (
     <>
@@ -77,8 +48,8 @@ export default async function ProjectPage({ params }: PageProps) {
 
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/3] rounded-2xl bg-wood-200 overflow-hidden">
-            <Image
-              src={project.image}
+            <ProjectImage
+              src={mainImage}
               alt={project.title}
               fill
               className="object-cover"
@@ -88,17 +59,17 @@ export default async function ProjectPage({ params }: PageProps) {
           </div>
           <div>
             <span className="text-xs font-medium uppercase tracking-wide text-accent">
-              {project.category}
+              {categoryLabels[project.category] ?? project.category}
             </span>
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-wood-800 sm:text-4xl">
               {project.title}
             </h1>
-            <p className="mt-6 text-wood-600 leading-relaxed">
-              {project.description}
-            </p>
+            <div className="mt-6 text-wood-600 leading-relaxed">
+              <RichText content={project.description} />
+            </div>
             <dl className="mt-8 grid gap-4 sm:grid-cols-3">
-              {project.details.map((d) => (
-                <div key={d.label}>
+              {(project.details as any[]).map((d: any) => (
+                <div key={d.id ?? d.label}>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-wood-400">
                     {d.label}
                   </dt>
@@ -131,14 +102,23 @@ export default async function ProjectPage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const project = projects[slug];
-  if (!project) return {};
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'projects',
+    where: { slug: { equals: slug } },
+  })
+  if (docs.length === 0) return {}
+  const project = docs[0] as any
   return {
     title: project.title,
-    description: project.description.slice(0, 160),
-  };
+    description: project.description
+      ? (project.description as any).root?.children?.[0]?.children?.[0]?.text?.slice(0, 160)
+      : '',
+  }
 }
 
 export async function generateStaticParams() {
-  return Object.keys(projects).map((slug) => ({ slug }));
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({ collection: 'projects' })
+  return docs.map((doc: any) => ({ slug: doc.slug }))
 }

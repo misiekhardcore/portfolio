@@ -1,11 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ProjectImage } from "@/components/project-image";
 
 interface ProjectCardProps {
   title: string;
   category: string;
   slug: string;
-  image: string;
+  image?: string | null;
 }
 
 export function ProjectCard({ title, category, slug, image }: ProjectCardProps) {
@@ -15,7 +15,7 @@ export function ProjectCard({ title, category, slug, image }: ProjectCardProps) 
       className="group block rounded-2xl border border-wood-200 bg-white overflow-hidden transition-shadow hover:shadow-lg"
     >
       <div className="relative aspect-[4/3] bg-wood-100 overflow-hidden">
-        <Image
+        <ProjectImage
           src={image}
           alt={title}
           fill

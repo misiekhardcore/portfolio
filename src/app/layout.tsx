@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,14 +16,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "YourCompany — Woodworking & Renovations",
-    template: "%s | YourCompany",
-  },
-  description:
-    "Expert woodworking and home renovation craftsmanship. Custom furniture, kitchen refits, decking, and complete interior transformations.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  let companyName = 'YourCompany'
+  try {
+    const payload = await getPayload({ config })
+    const settings = await payload.findGlobal({ slug: 'site-settings' })
+    if ((settings as any).companyName) companyName = (settings as any).companyName
+  } catch { /* use default */ }
+
+  return {
+    title: {
+      default: `${companyName} — Woodworking & Renovations`,
+      template: `%s | ${companyName}`,
+    },
+    description:
+      "Expert woodworking and home renovation craftsmanship. Custom furniture, kitchen refits, decking, and complete interior transformations.",
+  }
+}
 
 export default function RootLayout({
   children,
