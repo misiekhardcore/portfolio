@@ -1,7 +1,10 @@
+import { getPayload } from "payload";
+import config from "@payload-config";
 import { Section } from "@/components/section";
 import { ServiceCard } from "@/components/service-card";
 import { ProjectCard } from "@/components/project-card";
 import Link from "next/link";
+import type { Project } from "@/payload-types";
 
 const services = [
   {
@@ -63,28 +66,24 @@ const services = [
   },
 ];
 
-const featuredProjects = [
-  {
-    title: "Oak & Steel Kitchen",
-    category: "Kitchen Renovation",
-    slug: "oak-steel-kitchen",
-    image: "/projects/kitchen-placeholder.jpg",
-  },
-  {
-    title: "Herringbone Deck",
-    category: "Decking",
-    slug: "herringbone-deck",
-    image: "/projects/deck-placeholder.jpg",
-  },
-  {
-    title: "Floor-to-Ceiling Library",
-    category: "Custom Furniture",
-    slug: "library-wall",
-    image: "/projects/library-placeholder.jpg",
-  },
-];
+async function getFeaturedProjects(): Promise<Project[]> {
+  try {
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: "projects",
+      where: { featured: { equals: true } },
+      depth: 2,
+      limit: 3,
+    });
+    return docs as Project[];
+  } catch {
+    return [];
+  }
+}
 
-export default function Home() {
+export default async function Home() {
+  const featuredProjects = await getFeaturedProjects();
+
   return (
     <>
       {/* Hero */}
@@ -136,11 +135,17 @@ export default function Home() {
         subtitle="A selection of projects we&rsquo;re proud of."
         className="bg-white"
       >
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((proj) => (
-            <ProjectCard key={proj.slug} {...proj} />
-          ))}
-        </div>
+        {featuredProjects.length === 0 ? (
+          <div className="rounded-2xl border border-wood-200 bg-white p-12 text-center text-wood-400 text-sm">
+            No featured projects yet
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredProjects.map((p) => (
+              <ProjectCard key={p.id} project={p} />
+            ))}
+          </div>
+        )}
         <div className="mt-10 text-center">
           <Link
             href="/projects"
