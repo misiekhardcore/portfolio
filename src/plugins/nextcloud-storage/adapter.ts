@@ -4,6 +4,7 @@ import { putFile, deleteFile, getFile } from './webdav'
 interface CreateAdapterArgs { baseUrl: string; username: string; password: string; mediaRoot: string }
 
 function getFolder(doc: unknown): string {
+  if (!doc) return 'projects'
   return ((doc as Record<string, unknown>).folder as string) || 'projects'
 }
 
