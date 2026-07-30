@@ -1,5 +1,5 @@
 import type { Adapter, GeneratedAdapter } from '@payloadcms/plugin-cloud-storage/types'
-import { putFile, deleteFile } from './webdav'
+import { putFile, deleteFile, getFile } from './webdav'
 
 interface CreateAdapterArgs { baseUrl: string; username: string; password: string; mediaRoot: string }
 
@@ -23,6 +23,22 @@ export function createNextcloudAdapter(args: CreateAdapterArgs): Adapter {
     },
     generateURL: ({ filename, data }) =>
       `/api/images/${getFolder(data)}/${filename}`,
-    staticHandler: () => new Response('Not found', { status: 404 }),
+    staticHandler: async (_req, { doc, params: { filename } }) => {
+      try {
+        const folder = getFolder(doc)
+        const remotePath = `${args.mediaRoot}/${folder}/${filename}`
+        const { buffer, contentType } = await getFile(
+          args.baseUrl, args.username, args.password, remotePath,
+        )
+        return new Response(new Uint8Array(buffer), {
+          headers: {
+            'Content-Type': contentType,
+            'Cache-Control': 'public, max-age=31536000, immutable',
+          },
+        })
+      } catch {
+        return new Response('Not found', { status: 404 })
+      }
+    },
   })
 }
