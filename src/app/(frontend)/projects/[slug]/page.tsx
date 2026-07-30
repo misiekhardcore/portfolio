@@ -4,21 +4,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/section";
 import { ProjectImage } from "@/components/project-image";
+import { ProjectGallerySection } from "@/components/project-gallery-section";
 import type { Project, Media } from "@/payload-types";
+import type { GalleryImage } from "@/components/masonry-gallery";
+import { RichText } from "@payloadcms/richtext-lexical/react";
+import { buildImagePath, extractLexicalText } from "@/lib/image-url";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-}
-
-function richTextToPlainText(node: unknown): string {
-  if (!node) return "";
-  if (typeof node === "string") return node;
-  if (typeof node !== "object") return "";
-  const n = node as Record<string, unknown>;
-  if (n.text) return String(n.text);
-  if (n.children) return (n.children as unknown[]).map(richTextToPlainText).join("\n");
-  if (n.root) return richTextToPlainText(n.root);
-  return "";
 }
 
 async function getProjectBySlug(slug: string): Promise<Project | null> {
@@ -42,15 +35,53 @@ export default async function ProjectPage({ params }: PageProps) {
   if (!project) notFound();
 
   const firstImage = project.images?.[0];
-  const media = firstImage?.image;
-  const mediaObj: Media | null = media && typeof media === "object" ? media : null;
-  const imagePath = mediaObj?.filename
-    ? `${mediaObj.folder || "projects"}/${mediaObj.filename}`
-    : undefined;
-  const imageAlt = mediaObj?.alt || project.title;
+  const heroMedia = firstImage?.image;
+  const heroMediaObj: Media | null = heroMedia && typeof heroMedia === "object" ? heroMedia : null;
+  const heroPath = buildImagePath(heroMediaObj?.filename, heroMediaObj?.folder);
+  const heroAlt = heroMediaObj?.alt || project.title;
+  const categoryName =
+    typeof project.category === "object" && project.category ? project.category.name : "Uncategorized";
+
+  const galleryImages: GalleryImage[] = (project.images ?? [])
+    .slice(1)
+    .filter((item) => typeof item.image === "object" && item.image?.filename)
+    .map((item) => {
+      const img = item.image as Media;
+      return {
+        id: item.id,
+        image: { filename: img.filename, folder: img.folder, alt: img.alt },
+        caption: item.caption,
+      };
+    });
 
   return (
     <>
+      <div className="relative aspect-21/9 w-full max-w-6xl mx-auto overflow-hidden rounded-2xl bg-wood-200">
+        {heroPath ? (
+          <ProjectImage
+            path={heroPath}
+            alt={heroAlt}
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover"
+          />
+        ) : (
+          <div className="h-full flex items-center justify-center text-wood-400 text-sm">
+            No image
+          </div>
+        )}
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-8 md:p-12">
+          <span className="inline-block text-xs font-medium uppercase tracking-wide text-white/80 bg-black/30 rounded-full px-3 py-1">
+            {categoryName}
+          </span>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
+            {project.title}
+          </h1>
+        </div>
+      </div>
+
       <Section>
         <Link
           href="/projects"
@@ -70,37 +101,18 @@ export default async function ProjectPage({ params }: PageProps) {
           Back to projects
         </Link>
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="relative aspect-[4/3] rounded-2xl bg-wood-200 overflow-hidden">
-            {imagePath ? (
-              <ProjectImage
-                path={imagePath}
-                alt={imageAlt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-                className="object-cover"
-              />
+        <div className="grid gap-10 lg:grid-cols-3 lg:gap-16">
+          <div className="lg:col-span-2 text-wood-600 leading-relaxed">
+            {project.description ? (
+              <RichText data={project.description} />
             ) : (
-              <div className="h-full flex items-center justify-center text-wood-400 text-sm">
-                No image
-              </div>
+              <p>No description available.</p>
             )}
           </div>
-          <div>
-            <span className="text-xs font-medium uppercase tracking-wide text-accent">
-              {typeof project.category === "object" && project.category ? project.category.name : "Uncategorized"}
-            </span>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-wood-800 sm:text-4xl">
-              {project.title}
-            </h1>
-            <p className="mt-6 text-wood-600 leading-relaxed">
-              {project.description
-                ? richTextToPlainText(project.description)
-                : "No description available."}
-            </p>
-            {project.details && project.details.length > 0 && (
-              <dl className="mt-8 grid gap-4 sm:grid-cols-3">
+
+          {project.details && project.details.length > 0 && (
+            <aside className="lg:col-span-1">
+              <dl className="sticky top-24 grid gap-4 rounded-2xl border border-wood-200 bg-wood-50 p-6">
                 {project.details.map((d) => (
                   <div key={d.label}>
                     <dt className="text-xs font-semibold uppercase tracking-wide text-wood-400">
@@ -110,10 +122,16 @@ export default async function ProjectPage({ params }: PageProps) {
                   </div>
                 ))}
               </dl>
-            )}
-          </div>
+            </aside>
+          )}
         </div>
       </Section>
+
+      {galleryImages.length > 0 && (
+        <Section title="Gallery">
+          <ProjectGallerySection images={galleryImages} />
+        </Section>
+      )}
 
       <Section className="text-center bg-wood-800 text-wood-100 rounded-none">
         <h2 className="text-3xl font-semibold tracking-tight">
@@ -142,6 +160,8 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: project.title,
-    description: project.description ? richTextToPlainText(project.description).slice(0, 160) : "",
+    description: project.description
+      ? extractLexicalText(project.description).slice(0, 160)
+      : "",
   };
 }
