@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Project Page Redesign — Options</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+<style type="text/tailwindcss">
+  @theme {
+    --color-wood-50: #faf6f1;
+    --color-wood-100: #f0e8dc;
+    --color-wood-200: #e0cdb3;
+    --color-wood-300: #c9a87c;
+    --color-wood-400: #b08968;
+    --color-wood-500: #8b6f4a;
+    --color-wood-600: #6b4f32;
+    --color-wood-700: #4a3422;
+    --color-wood-800: #2c1e12;
+    --color-wood-900: #1a100a;
+    --color-accent: #c9773a;
+    --color-accent-dark: #a85d2a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  :where(.grid, .flex) > * { min-width: 0; }
+  :where(p, h1, h2, h3, h4, h5, h6, li, dd, blockquote, figcaption) { overflow-wrap: anywhere; }
+  :where(img, svg) { max-width: 100%; height: auto; }
+</style>
+</head>
+<body class="bg-wood-50 text-wood-800 font-sans antialiased">
+
+<!-- Header -->
+<header class="bg-white border-b border-wood-200 sticky top-0 z-10">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="text-xl font-bold text-wood-800 tracking-tight">Portfolio Redesign</span>
+      <span class="text-xs text-wood-400">Project Page Proposals</span>
+    </div>
+    <span class="badge bg-accent/10 text-accent text-xs px-3 py-1 rounded-full font-medium">3 Options</span>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+
+  <!-- ============================================================ -->
+  <!-- CURRENT STATE -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-2 h-2 rounded-full bg-wood-400"></span>
+      <h2 class="text-sm font-semibold uppercase tracking-widest text-wood-400">Current State</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-wood-200 overflow-hidden shadow-sm">
+      <div class="p-6 border-b border-wood-100 bg-wood-50/50">
+        <h3 class="text-lg font-semibold text-wood-800">What we have today</h3>
+        <p class="text-sm text-wood-500 mt-1">One hero image, plain-text description, key-value details grid</p>
+      </div>
+
+      <!-- Current layout mockup -->
+      <div class="p-6 grid gap-8 lg:grid-cols-2">
+        <!-- Hero image -->
+        <div class="aspect-[4/3] rounded-xl bg-wood-200 flex items-center justify-center border border-dashed border-wood-300">
+          <div class="text-center text-wood-400">
+            <svg class="mx-auto mb-2" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="text-xs font-medium">Single Hero Image</span><br>
+            <span class="text-[10px] text-wood-300">4:3 aspect · first in images[]</span>
+          </div>
+        </div>
+
+        <!-- Text content -->
+        <div class="space-y-4">
+          <span class="text-xs font-medium uppercase tracking-wide text-accent">Category Badge</span>
+          <h2 class="text-2xl font-bold text-wood-800">Project Title</h2>
+          <div class="space-y-2">
+            <div class="h-3 bg-wood-100 rounded w-full"></div>
+            <div class="h-3 bg-wood-100 rounded w-4/5"></div>
+            <div class="h-3 bg-wood-100 rounded w-3/5"></div>
+            <div class="h-3 bg-wood-100 rounded w-2/3"></div>
+          </div>
+          <p class="text-xs text-wood-400 italic mt-2">Description — richText stripped to plain text via richTextToPlainText()</p>
+
+          <!-- Details grid -->
+          <div class="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-wood-100">
+            <div>
+              <dt class="text-[10px] font-semibold uppercase text-wood-400">Client</dt>
+              <dd class="text-sm text-wood-700">ACME Corp</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] font-semibold uppercase text-wood-400">Year</dt>
+              <dd class="text-sm text-wood-700">2024</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] font-semibold uppercase text-wood-400">Role</dt>
+              <dd class="text-sm text-wood-700">Developer</dd>
+            </div>
+          </div>
+          <p class="text-[10px] text-wood-300">details[] array → &lt;dl&gt; grid</p>
+        </div>
+      </div>
+
+      <!-- Problems callout -->
+      <div class="px-6 pb-6 grid gap-3 sm:grid-cols-3">
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-xs">
+          <span class="font-semibold text-red-700">No rich text</span>
+          <p class="text-red-600 mt-0.5">description rendered as plain text, losing all formatting</p>
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-xs">
+          <span class="font-semibold text-red-700">One image only</span>
+          <p class="text-red-600 mt-0.5">images[] has multiple entries but only first is shown</p>
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-xs">
+          <span class="font-semibold text-red-700">Flat structure</span>
+          <p class="text-red-600 mt-0.5">No narrative flow — just key-value data dump</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DECISION OVERVIEW -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-2 h-2 rounded-full bg-accent"></span>
+      <h2 class="text-sm font-semibold uppercase tracking-widest text-accent">The Decision</h2>
+    </div>
+
+    <p class="text-wood-600 max-w-3xl leading-relaxed">
+      You want project pages to feel like <strong>rich articles with photos</strong> — narrative content with embedded media,
+      not a data sheet. The core question is <em>how much flexibility</em> you need from the CMS editor and what
+      the reading experience should feel like. Below are three approaches, from minimal change to full editorial control.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION A -->
+  <!-- ============================================================ -->
+  <section id="option-a">
+    <div class="bg-white rounded-2xl border-2 border-accent/20 shadow-md overflow-hidden">
+      <div class="bg-accent/5 px-6 py-4 border-b border-accent/10 flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <span class="text-xs font-medium text-accent uppercase tracking-wider">Option A</span>
+          <h3 class="text-xl font-bold text-wood-800 mt-0.5">Rich Article + Photo Gallery</h3>
+        </div>
+        <span class="badge text-xs px-3 py-1 rounded-full font-medium bg-green-100 text-green-800 border border-green-200">Minimal schema change</span>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <p class="text-sm text-wood-600">Keep the existing <code class="bg-wood-100 px-1.5 py-0.5 rounded text-xs">images[]</code> and <code class="bg-wood-100 px-1.5 py-0.5 rounded text-xs">description</code> fields.
+        Render <strong>description as real rich text</strong> (headings, bold, lists, links) and add a <strong>photo gallery section</strong>
+        that shows all images (not just the first). The <code class="bg-wood-100 px-1.5 py-0.5 rounded text-xs">details[]</code> key-value pairs become a small sidebar or inline metadata section.</p>
+
+        <!-- Layout mockup -->
+        <div class="border border-wood-200 rounded-xl overflow-hidden">
+          <div class="bg-wood-50 px-4 py-2 border-b border-wood-100 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-400"></span>
+            <span class="text-xs text-wood-500 font-medium">Proposed layout</span>
+          </div>
+
+          <div class="p-0">
+            <!-- Hero area -->
+            <div class="relative aspect-[21/9] bg-wood-200 flex items-center justify-center border-b border-wood-100">
+              <span class="text-sm text-wood-400">Hero image (first in gallery, full-width)</span>
+            </div>
+
+            <div class="p-6 lg:grid lg:grid-cols-[1fr_200px] gap-8">
+              <!-- Article body -->
+              <div class="space-y-4">
+                <span class="text-xs font-medium uppercase tracking-wide text-accent">Web Development</span>
+                <h1 class="text-2xl font-bold text-wood-800">Project Title — as an article heading</h1>
+                <div class="text-sm text-wood-600 space-y-2">
+                  <p class="font-semibold text-wood-700">Rich text rendered with full formatting:</p>
+                  <ul class="list-disc pl-4 space-y-1 marker:text-accent">
+                    <li><strong>Bold headings</strong> from rich text h2/h3</li>
+                    <li>Bullet lists and numbered lists</li>
+                    <li>Inline <a href="#" class="text-accent underline">links</a> preserved</li>
+                    <li>Block quotes and code blocks</li>
+                  </ul>
+                  <p class="text-wood-400 italic">Rendered via Payload&rsquo;s rich text serializer, not stripped to plain text.</p>
+                </div>
+
+                <!-- Inline gallery preview -->
+                <div class="mt-6">
+                  <p class="text-xs font-semibold text-wood-500 mb-3 uppercase tracking-wide">Photo Gallery</p>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo 1</div>
+                    <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo 2</div>
+                    <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo 3</div>
+                    <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo 4</div>
+                    <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo 5</div>
+                    <div class="aspect-square rounded-lg bg-wood-300 flex items-center justify-center text-[10px] text-wood-500 font-medium">+3 more</div>
+                  </div>
+                  <p class="text-[10px] text-wood-400 mt-1">Click to open lightbox · captions from images[].caption</p>
+                </div>
+              </div>
+
+              <!-- Sidebar metadata -->
+              <div class="mt-6 lg:mt-0">
+                <div class="bg-wood-50 rounded-xl p-4 space-y-4 sticky top-20">
+                  <p class="text-xs font-semibold text-wood-500 uppercase tracking-wide">Details</p>
+                  <div class="space-y-3">
+                    <div><dt class="text-[10px] font-semibold uppercase text-wood-400">Date</dt><dd class="text-sm text-wood-700">June 2024</dd></div>
+                    <div><dt class="text-[10px] font-semibold uppercase text-wood-400">Client</dt><dd class="text-sm text-wood-700">ACME Corp</dd></div>
+                    <div><dt class="text-[10px] font-semibold uppercase text-wood-400">Role</dt><dd class="text-sm text-wood-700">Full-stack</dd></div>
+                    <div><dt class="text-[10px] font-semibold uppercase text-wood-400">Stack</dt><dd class="text-sm text-wood-700">Next.js, Payload</dd></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Changes needed -->
+        <div class="grid gap-3 sm:grid-cols-2 text-xs">
+          <div class="bg-wood-50 rounded-lg p-3">
+            <span class="font-semibold text-wood-700">Schema changes</span>
+            <p class="text-wood-500 mt-0.5">None. Uses existing fields.</p>
+          </div>
+          <div class="bg-wood-50 rounded-lg p-3">
+            <span class="font-semibold text-wood-700">Frontend work</span>
+            <p class="text-wood-500 mt-0.5">Rich text serializer + gallery grid + lightbox component</p>
+          </div>
+          <div class="bg-wood-50 rounded-lg p-3">
+            <span class="font-semibold text-wood-700">Gallery behavior</span>
+            <p class="text-wood-500 mt-0.5">Grid of thumbnails, click to open full-size lightbox carousel</p>
+          </div>
+          <div class="bg-wood-50 rounded-lg p-3">
+            <span class="font-semibold text-wood-700">Editor experience</span>
+            <p class="text-wood-500 mt-0.5">Same Payload admin — write in rich text, upload images to array</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION B -->
+  <!-- ============================================================ -->
+  <section id="option-b">
+    <div class="bg-white rounded-2xl border border-wood-200 shadow-sm overflow-hidden">
+      <div class="bg-wood-50 px-6 py-4 border-b border-wood-100 flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <span class="text-xs font-medium text-wood-500 uppercase tracking-wider">Option B</span>
+          <h3 class="text-xl font-bold text-wood-800 mt-0.5">Blocks-Based Page Builder</h3>
+        </div>
+        <span class="badge text-xs px-3 py-1 rounded-full font-medium bg-amber-100 text-amber-800 border border-amber-200">Maximum flexibility</span>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <p class="text-sm text-wood-600">Replace flat fields with a Payload <strong>Blocks</strong> field. Editors compose pages from reusable blocks: text sections, full-bleed images, side-by-side layouts, galleries, pull quotes, embedded videos. Think Notion or WordPress Gutenberg — but tailored to your brand.</p>
+
+        <!-- Layout mockup -->
+        <div class="border border-wood-200 rounded-xl overflow-hidden">
+          <div class="bg-wood-50 px-4 py-2 border-b border-wood-100 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span class="text-xs text-wood-500 font-medium">Proposed layout — blocks assemble into a page</span>
+          </div>
+
+          <div class="divide-y divide-wood-100">
+            <!-- Hero block -->
+            <div class="relative aspect-[21/9] bg-wood-200 flex items-center justify-center">
+              <div class="text-center">
+                <span class="text-sm text-wood-400 font-medium">[Hero Block]</span><br>
+                <span class="text-[10px] text-wood-300">Full-bleed image + overlay title</span>
+              </div>
+            </div>
+
+            <!-- Text block -->
+            <div class="px-6 py-4 max-w-2xl mx-auto">
+              <span class="text-[10px] text-wood-300 font-medium uppercase">[Text Block]</span>
+              <div class="space-y-2 mt-2">
+                <h2 class="text-xl font-bold text-wood-800">Section heading from rich text</h2>
+                <div class="space-y-1">
+                  <div class="h-2.5 bg-wood-100 rounded w-full"></div>
+                  <div class="h-2.5 bg-wood-100 rounded w-11/12"></div>
+                  <div class="h-2.5 bg-wood-100 rounded w-4/5"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image + text side-by-side block -->
+            <div class="px-6 py-4 grid grid-cols-2 gap-6">
+              <div class="aspect-[4/3] rounded-lg bg-wood-200 flex items-center justify-center text-xs text-wood-400">[Image Block]</div>
+              <div class="space-y-2 flex flex-col justify-center">
+                <span class="text-[10px] text-wood-300 font-medium uppercase">[Text Block]</span>
+                <div class="space-y-1">
+                  <div class="h-2.5 bg-wood-100 rounded w-full"></div>
+                  <div class="h-2.5 bg-wood-100 rounded w-5/6"></div>
+                  <div class="h-2.5 bg-wood-100 rounded w-3/4"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gallery block -->
+            <div class="px-6 py-4">
+              <span class="text-[10px] text-wood-300 font-medium uppercase">[Gallery Block]</span>
+              <div class="grid grid-cols-4 gap-2 mt-2">
+                <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">1</div>
+                <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">2</div>
+                <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">3</div>
+                <div class="aspect-square rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">4</div>
+              </div>
+            </div>
+
+            <!-- Quote block -->
+            <div class="px-6 py-4 max-w-xl mx-auto text-center">
+              <span class="text-[10px] text-wood-300 font-medium uppercase">[Pull Quote Block]</span>
+              <blockquote class="mt-2 text-lg italic text-wood-600 border-l-4 border-accent pl-4">
+                &ldquo;A standout testimonial or key insight from the project.&rdquo;
+              </blockquote>
+            </div>
+
+            <!-- CTA block -->
+            <div class="px-6 py-4 bg-wood-800 text-center">
+              <span class="text-[10px] text-wood-400 font-medium uppercase">[CTA Block]</span>
+              <p class="text-wood-100 text-sm mt-1">Call to action section — configurable text + button</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Block types -->
+        <div>
+          <p class="text-xs font-semibold text-wood-500 mb-3 uppercase tracking-wide">Available blocks (proposed)</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Hero</span><br><span class="text-wood-400">Image + title</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Rich Text</span><br><span class="text-wood-400">Formatted prose</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Image</span><br><span class="text-wood-400">Single photo</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Gallery</span><br><span class="text-wood-400">Photo grid</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Split</span><br><span class="text-wood-400">Image + text</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Quote</span><br><span class="text-wood-400">Pull quote</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">Video</span><br><span class="text-wood-400">YouTube embed</span></div>
+            <div class="bg-wood-50 rounded-lg p-2.5 text-center"><span class="font-medium text-wood-700">CTA</span><br><span class="text-wood-400">Call to action</span></div>
+          </div>
+        </div>
+
+        <!-- Changes needed -->
+        <div class="grid gap-3 sm:grid-cols-2 text-xs">
+          <div class="bg-amber-50 border border-amber-100 rounded-lg p-3">
+            <span class="font-semibold text-amber-800">Schema changes</span>
+            <p class="text-amber-700 mt-0.5">Major. Replace flat fields with a Blocks field. Define ~8 block types.</p>
+          </div>
+          <div class="bg-amber-50 border border-amber-100 rounded-lg p-3">
+            <span class="font-semibold text-amber-800">Frontend work</span>
+            <p class="text-amber-700 mt-0.5">Block renderer component + all block components + rich text serializer</p>
+          </div>
+          <div class="bg-amber-50 border border-amber-100 rounded-lg p-3">
+            <span class="font-semibold text-amber-800">Migration</span>
+            <p class="text-amber-700 mt-0.5">Need migration script to convert existing projects into block format</p>
+          </div>
+          <div class="bg-amber-50 border border-amber-100 rounded-lg p-3">
+            <span class="font-semibold text-amber-800">Editor experience</span>
+            <p class="text-amber-700 mt-0.5">Drag-and-drop block composer in Payload admin. Most flexible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION C -->
+  <!-- ============================================================ -->
+  <section id="option-c">
+    <div class="bg-white rounded-2xl border border-wood-200 shadow-sm overflow-hidden">
+      <div class="bg-wood-50 px-6 py-4 border-b border-wood-100 flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <span class="text-xs font-medium text-wood-500 uppercase tracking-wider">Option C</span>
+          <h3 class="text-xl font-bold text-wood-800 mt-0.5">Inline Images + Editorial Layout</h3>
+        </div>
+        <span class="badge text-xs px-3 py-1 rounded-full font-medium bg-blue-100 text-blue-800 border border-blue-200">Editorial feel</span>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <p class="text-sm text-wood-600">Enable <strong>inline image uploads within the rich text editor</strong> (Payload Lexical with upload feature).
+        This lets photos appear naturally within the article body — like a Medium or blog post. Keep a separate gallery field
+        for supplementary photos. The page becomes a single-column article with images breaking the text at natural points.</p>
+
+        <!-- Layout mockup: single column article -->
+        <div class="border border-wood-200 rounded-xl overflow-hidden">
+          <div class="bg-wood-50 px-4 py-2 border-b border-wood-100 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+            <span class="text-xs text-wood-500 font-medium">Proposed layout — article-style single column</span>
+          </div>
+
+          <div class="max-w-2xl mx-auto px-6 py-8 space-y-8">
+            <!-- Hero -->
+            <div class="aspect-[16/7] rounded-xl bg-wood-200 flex items-center justify-center">
+              <span class="text-sm text-wood-400">Hero image</span>
+            </div>
+
+            <!-- Title + meta -->
+            <div class="text-center">
+              <span class="text-xs font-medium uppercase tracking-wide text-accent">Web Development</span>
+              <h1 class="text-2xl font-bold text-wood-800 mt-1">Project Title as Article Headline</h1>
+              <div class="flex items-center justify-center gap-3 mt-3 text-xs text-wood-400">
+                <span>June 2024</span>
+                <span>·</span>
+                <span>Client: ACME Corp</span>
+                <span>·</span>
+                <span>Role: Full-stack</span>
+              </div>
+            </div>
+
+            <!-- Rich text with inline images -->
+            <div class="space-y-4 text-sm text-wood-600 leading-relaxed">
+              <p class="font-semibold text-wood-700">Rich text paragraph with formatting:</p>
+              <p>This is an introductory paragraph that sets the context for the project. It describes the problem, the client&rsquo;s needs, and what we set out to achieve. The text flows naturally as a narrative.</p>
+
+              <!-- Inline image -->
+              <div class="aspect-[16/9] rounded-lg bg-wood-200 flex items-center justify-center my-6">
+                <div class="text-center text-wood-400">
+                  <span class="text-xs font-medium">Inline image within article</span><br>
+                  <span class="text-[10px]">Uploaded directly into rich text editor</span>
+                </div>
+              </div>
+              <p class="text-[10px] text-wood-400 text-center -mt-4 italic">Caption from rich text or image alt</p>
+
+              <p>Another paragraph continues the narrative. This is where you&rsquo;d describe the technical approach, challenges overcome, and results delivered. The reading experience mirrors a blog post or Medium article.</p>
+
+              <blockquote class="border-l-4 border-accent pl-4 py-1 italic text-wood-500">
+                &ldquo;Key insight or testimonial formatted as a block quote.&rdquo;
+              </blockquote>
+
+              <p>Final paragraph wrapping up the project story with outcomes and reflections.</p>
+            </div>
+
+            <!-- Supplementary gallery at bottom -->
+            <div class="pt-6 border-t border-wood-100">
+              <p class="text-xs font-semibold text-wood-500 mb-3 uppercase tracking-wide">More Photos</p>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="aspect-[4/3] rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo</div>
+                <div class="aspect-[4/3] rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo</div>
+                <div class="aspect-[4/3] rounded-lg bg-wood-200 flex items-center justify-center text-[10px] text-wood-400">Photo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Changes needed -->
+        <div class="grid gap-3 sm:grid-cols-2 text-xs">
+          <div class="bg-blue-50 border border-blue-100 rounded-lg p-3">
+            <span class="font-semibold text-blue-800">Schema changes</span>
+            <p class="text-blue-700 mt-0.5">Moderate. Switch rich text editor to Lexical with upload enabled. Keep images[] for gallery.</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-lg p-3">
+            <span class="font-semibold text-blue-800">Frontend work</span>
+            <p class="text-blue-700 mt-0.5">Lexical serializer + gallery lightbox + article layout styling</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-lg p-3">
+            <span class="font-semibold text-blue-800">Inline images</span>
+            <p class="text-blue-700 mt-0.5">Photos live inside the rich text field — more natural article feel</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-lg p-3">
+            <span class="font-semibold text-blue-800">Editor experience</span>
+            <p class="text-blue-700 mt-0.5">Write like a blog post — paste/drag images inline, format freely</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- COMPARISON TABLE -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-2 h-2 rounded-full bg-wood-500"></span>
+      <h2 class="text-sm font-semibold uppercase tracking-widest text-wood-500">Comparison</h2>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl border border-wood-200 bg-white">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-wood-50 border-b border-wood-100">
+            <th class="text-left px-4 py-3 font-semibold text-wood-600">Criterion</th>
+            <th class="text-left px-4 py-3 font-semibold text-green-700 bg-green-50/50">A: Rich Article + Gallery</th>
+            <th class="text-left px-4 py-3 font-semibold text-amber-700 bg-amber-50/50">B: Blocks Builder</th>
+            <th class="text-left px-4 py-3 font-semibold text-blue-700 bg-blue-50/50">C: Inline Images</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-wood-100">
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Schema change</td>
+            <td class="px-4 py-3 text-green-700">None</td>
+            <td class="px-4 py-3 text-amber-700">Major — Blocks field</td>
+            <td class="px-4 py-3 text-blue-700">Moderate — Lexical editor</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Rich text rendering</td>
+            <td class="px-4 py-3">Slate serializer (already in Payload)</td>
+            <td class="px-4 py-3">Per-block serializer</td>
+            <td class="px-4 py-3">Lexical serializer</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Photo gallery</td>
+            <td class="px-4 py-3">Grid + lightbox</td>
+            <td class="px-4 py-3">Gallery block + lightbox</td>
+            <td class="px-4 py-3">Inline + supplementary grid</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Editor complexity</td>
+            <td class="px-4 py-3">Low — same as today</td>
+            <td class="px-4 py-3">High — block composer</td>
+            <td class="px-4 py-3">Medium — blog editor</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Layout flexibility</td>
+            <td class="px-4 py-3">Fixed template</td>
+            <td class="px-4 py-3">Unlimited — any layout</td>
+            <td class="px-4 py-3">Article template with variation</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Migration effort</td>
+            <td class="px-4 py-3">None — same data</td>
+            <td class="px-4 py-3">Script needed to convert</td>
+            <td class="px-4 py-3">Rich text may need re-editing</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Content consistency</td>
+            <td class="px-4 py-3">High — uniform look</td>
+            <td class="px-4 py-3">Low — each page can differ</td>
+            <td class="px-4 py-3">High — article template</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-wood-700">Best for</td>
+            <td class="px-4 py-3">Quick win, consistent showcase</td>
+            <td class="px-4 py-3">Unique per-project layouts</td>
+            <td class="px-4 py-3">Story-driven case studies</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- RECOMMENDATION -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="bg-gradient-to-br from-wood-800 to-wood-900 text-wood-100 rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <h2 class="text-lg font-bold">Suggested Path</h2>
+      </div>
+
+      <p class="text-wood-300 leading-relaxed mb-6 max-w-2xl">
+        <strong class="text-wood-100">Hybrid: Option A layout + Option C editor.</strong> Use the article-style layout from Option A
+        (hero image, gallery grid + lightbox, details sidebar) but power the body content with the
+        <strong class="text-wood-100">Lexical rich text editor with inline image upload</strong> from Option C.
+        This gives you the best of both worlds: a polished, consistent page template with a dedicated photo gallery,
+        <em>plus</em> the ability to drop images inline within the article prose for a natural editorial flow.
+      </p>
+
+      <p class="text-wood-300 leading-relaxed max-w-2xl">
+        The only schema change is switching the rich text editor from Slate to Lexical with upload enabled.
+        The existing <code class="text-wood-400 bg-wood-700 px-1 rounded">images[]</code> gallery field stays as-is for the photo grid.
+        <strong>Option B</strong> (blocks) remains available if you later need per-project layout freedom,
+        but the hybrid approach covers the core need with minimal disruption.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DECISIONS — RESOLVED -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-2 h-2 rounded-full bg-green-500"></span>
+      <h2 class="text-sm font-semibold uppercase tracking-widest text-green-700">Decisions — Resolved</h2>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2">
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+        <div class="flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-xs font-semibold text-green-800">Gallery: Masonry grid + lightbox carousel</span>
+        </div>
+        <p class="text-xs text-green-700 mt-1">Pinterest-style masonry layout. Show initial set with <strong>+N more</strong> button — clicking loads the next page inline (paginated). Clicking any image opens a full carousel lightbox with captions.</p>
+      </div>
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+        <div class="flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-xs font-semibold text-green-800">Details: Sidebar panel</span>
+        </div>
+        <p class="text-xs text-green-700 mt-1">Keep <code class="bg-green-100 px-1 rounded">details[]</code> key-value pairs in a sticky sidebar (Option A design).</p>
+      </div>
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+        <div class="flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-xs font-semibold text-green-800">Editor: Slate → Lexical with upload</span>
+        </div>
+        <p class="text-xs text-green-700 mt-1">Switch Payload&rsquo;s rich text editor to Lexical with inline image upload enabled.</p>
+      </div>
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+        <div class="flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-xs font-semibold text-green-800">Migration: None needed</span>
+        </div>
+        <p class="text-xs text-green-700 mt-1">No existing projects — fresh start, no migration.</p>
+      </div>
+    </div>
+
+    <!-- Approval badge -->
+    <div class="mt-6 bg-accent/10 border border-accent/30 rounded-xl p-4 flex items-center gap-3">
+      <span class="text-2xl">✅</span>
+      <div>
+        <p class="text-sm font-semibold text-wood-800">Hybrid approach approved</p>
+        <p class="text-xs text-wood-500">Option A layout + Lexical editor with inline images. Ready to implement.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-wood-200 mt-20 py-6 text-center text-xs text-wood-400">
+  Portfolio Project Page Redesign — Proposal · Annotate in Lavish to provide feedback
+</footer>
+
+</body>
+</html>
