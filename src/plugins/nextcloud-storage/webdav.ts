@@ -1,22 +1,28 @@
+function encodePath(path: string): string {
+  return path.split('/').map(encodeURIComponent).join('/')
+}
+
 export async function putFile(
   baseUrl: string, username: string, password: string,
   remotePath: string, buffer: Buffer
 ): Promise<void> {
-  const url = `${baseUrl}/remote.php/dav/files/${encodeURIComponent(username)}/${remotePath}`
+  const normalizedBase = baseUrl.replace(/\/+$/, '')
+  const url = `${normalizedBase}/remote.php/dav/files/${encodeURIComponent(username)}/${encodePath(remotePath)}`
   const auth = Buffer.from(`${username}:${password}`).toString('base64')
   const response = await fetch(url, {
     method: 'PUT',
     headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/octet-stream' },
     body: new Uint8Array(buffer),
   })
-  if (!response.ok) throw new Error(`WebDAV PUT failed: ${response.status}`)
+  if (!response.ok) throw new Error(`WebDAV PUT failed: ${response.status} ${response.statusText}`)
 }
 
 export async function deleteFile(
   baseUrl: string, username: string, password: string,
   remotePath: string
 ): Promise<void> {
-  const url = `${baseUrl}/remote.php/dav/files/${encodeURIComponent(username)}/${remotePath}`
+  const normalizedBase = baseUrl.replace(/\/+$/, '')
+  const url = `${normalizedBase}/remote.php/dav/files/${encodeURIComponent(username)}/${encodePath(remotePath)}`
   const auth = Buffer.from(`${username}:${password}`).toString('base64')
   const response = await fetch(url, {
     method: 'DELETE',
@@ -29,7 +35,8 @@ export async function getFile(
   baseUrl: string, username: string, password: string,
   remotePath: string
 ): Promise<{ buffer: Buffer; contentType: string }> {
-  const url = `${baseUrl}/remote.php/dav/files/${encodeURIComponent(username)}/${remotePath}`
+  const normalizedBase = baseUrl.replace(/\/+$/, '')
+  const url = `${normalizedBase}/remote.php/dav/files/${encodeURIComponent(username)}/${encodePath(remotePath)}`
   const auth = Buffer.from(`${username}:${password}`).toString('base64')
   const response = await fetch(url, { headers: { 'Authorization': `Basic ${auth}` } })
   if (!response.ok) throw new Error(`WebDAV GET failed: ${response.status}`)

@@ -165,7 +165,7 @@ export interface Category {
 export interface Project {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   category?: (number | null) | Category;
   description?: {
     root: {
@@ -208,7 +208,7 @@ export interface Project {
 export interface Media {
   id: number;
   alt?: string | null;
-  folder?: string | null;
+  folder?: ('projects' | 'site' | 'media') | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
