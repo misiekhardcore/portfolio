@@ -17,7 +17,6 @@ export default buildConfig({
       collections: {
         media: {
           disableLocalStorage: true,
-          disablePayloadAccessControl: true,
         },
       },
       baseUrl: process.env.NEXTCLOUD_BASE!,
