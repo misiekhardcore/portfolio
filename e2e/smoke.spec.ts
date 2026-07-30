@@ -41,3 +41,14 @@ test('GET /api/images/test.jpg → 200 with cache headers', async ({ request }) 
     expect(res.headers()['cache-control']).toBeDefined()
   }
 })
+
+test('GET /projects → shows project cards or empty state', async ({ page }) => {
+  await page.goto('/projects')
+  const cards = page.locator('.grid a[href^="/projects/"]')
+  const cardCount = await cards.count()
+  if (cardCount > 0) {
+    await expect(cards.first()).toBeVisible()
+  } else {
+    await expect(page.getByText('No projects yet')).toBeVisible()
+  }
+})

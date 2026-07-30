@@ -1,6 +1,6 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
 import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Categories } from './collections/Categories'
@@ -29,7 +29,18 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL!,
     },
   }),
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      UploadFeature({
+        collections: {
+          media: {
+            fields: [],
+          },
+        },
+      }),
+    ],
+  }),
   sharp,
   collections: [Users, Categories, Projects, Media],
 })
