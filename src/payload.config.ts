@@ -15,7 +15,10 @@ export default buildConfig({
   plugins: [
     nextcloudStorage({
       collections: {
-        media: { disableLocalStorage: true },
+        media: {
+          disableLocalStorage: true,
+          disablePayloadAccessControl: true,
+        },
       },
       baseUrl: process.env.NEXTCLOUD_BASE!,
       username: process.env.NEXTCLOUD_USER!,
