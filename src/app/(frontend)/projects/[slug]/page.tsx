@@ -56,7 +56,7 @@ export default async function ProjectPage({ params }: PageProps) {
 
   return (
     <>
-      <div className="relative aspect-[21/9] w-full max-w-6xl mx-auto overflow-hidden rounded-2xl bg-wood-200">
+      <div className="relative aspect-21/9 w-full max-w-6xl mx-auto overflow-hidden rounded-2xl bg-wood-200">
         {heroPath ? (
           <ProjectImage
             path={heroPath}
@@ -71,7 +71,7 @@ export default async function ProjectPage({ params }: PageProps) {
             No image
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-8 md:p-12">
           <span className="inline-block text-xs font-medium uppercase tracking-wide text-white/80 bg-black/30 rounded-full px-3 py-1">
             {categoryName}
