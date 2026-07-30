@@ -8,6 +8,7 @@ import { ProjectGallerySection } from "@/components/project-gallery-section";
 import type { Project, Media } from "@/payload-types";
 import type { GalleryImage } from "@/components/masonry-gallery";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import { buildImagePath, extractLexicalText } from "@/lib/image-url";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -36,24 +37,22 @@ export default async function ProjectPage({ params }: PageProps) {
   const firstImage = project.images?.[0];
   const heroMedia = firstImage?.image;
   const heroMediaObj: Media | null = heroMedia && typeof heroMedia === "object" ? heroMedia : null;
-  const heroPath = heroMediaObj?.filename
-    ? `${heroMediaObj.folder || "projects"}/${heroMediaObj.filename}`
-    : undefined;
+  const heroPath = buildImagePath(heroMediaObj?.filename, heroMediaObj?.folder);
   const heroAlt = heroMediaObj?.alt || project.title;
   const categoryName =
     typeof project.category === "object" && project.category ? project.category.name : "Uncategorized";
 
-  const galleryImages: GalleryImage[] = (project.images ?? []).slice(1).map((item) => {
-    const img =
-      item.image && typeof item.image === "object"
-        ? item.image
-        : { filename: "", folder: "projects", alt: "" };
-    return {
-      id: item.id,
-      image: img,
-      caption: item.caption,
-    };
-  });
+  const galleryImages: GalleryImage[] = (project.images ?? [])
+    .slice(1)
+    .filter((item) => typeof item.image === "object" && item.image?.filename)
+    .map((item) => {
+      const img = item.image as Media;
+      return {
+        id: item.id,
+        image: { filename: img.filename, folder: img.folder, alt: img.alt },
+        caption: item.caption,
+      };
+    });
 
   return (
     <>
@@ -161,6 +160,8 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: project.title,
-    description: project.description ? String(JSON.stringify(project.description)).slice(0, 160) : "",
+    description: project.description
+      ? extractLexicalText(project.description).slice(0, 160)
+      : "",
   };
 }

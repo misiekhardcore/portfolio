@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { ProjectImage } from "./project-image";
+import { buildImagePath } from "@/lib/image-url";
 
 export interface GalleryImage {
   id?: string | null;
-  image:
-    | { filename?: string | null; folder?: string | null; alt?: string | null }
-    | { id: string; filename?: string | null; folder?: string | null; alt?: string | null };
+  image: { filename?: string | null; folder?: string | null; alt?: string | null };
   caption?: string | null;
 }
 
@@ -18,10 +17,7 @@ interface MasonryGalleryProps {
 }
 
 function getImagePath(imageObj: GalleryImage["image"]): string | null {
-  const filename = imageObj.filename;
-  if (!filename) return null;
-  const folder = imageObj.folder || "projects";
-  return `${folder}/${filename}`;
+  return buildImagePath(imageObj.filename, imageObj.folder);
 }
 
 function getImageAlt(imageObj: GalleryImage["image"]): string {
@@ -45,7 +41,7 @@ export function MasonryGallery({
 
   return (
     <div>
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
         {visible.map((item, i) => {
           const imagePath = getImagePath(item.image);
           const alt = getImageAlt(item.image);

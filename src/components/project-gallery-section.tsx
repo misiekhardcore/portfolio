@@ -5,16 +5,16 @@ import { MasonryGallery } from "@/components/masonry-gallery";
 import { Lightbox } from "@/components/lightbox";
 import type { LightboxImage } from "@/components/lightbox";
 import type { GalleryImage } from "@/components/masonry-gallery";
+import { buildImageUrl } from "@/lib/image-url";
 
 function toLightboxImages(images: GalleryImage[]): LightboxImage[] {
-  return images.map((item) => {
-    const filename = item.image.filename;
-    const folder = item.image.folder || "projects";
-    const src = filename ? `/api/images/${folder}/${filename}` : "";
-    const alt = item.image.alt || item.image.filename || "Gallery image";
-
-    return { src, alt, caption: item.caption };
-  });
+  return images
+    .filter((item) => item.image.filename)
+    .map((item) => {
+      const src = buildImageUrl(item.image.filename, item.image.folder) || "";
+      const alt = item.image.alt || item.image.filename || "Gallery image";
+      return { src, alt, caption: item.caption };
+    });
 }
 
 interface ProjectGallerySectionProps {
@@ -41,12 +41,15 @@ export function ProjectGallerySection({ images }: ProjectGallerySectionProps) {
         }}
       />
 
-      <Lightbox
-        images={lightboxImages}
-        isOpen={lightboxOpen}
-        initialIndex={lightboxIndex}
-        onClose={() => setLightboxOpen(false)}
-      />
+      {lightboxOpen && (
+        <Lightbox
+          key={lightboxIndex}
+          images={lightboxImages}
+          isOpen={lightboxOpen}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </>
   );
 }

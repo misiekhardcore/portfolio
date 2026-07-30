@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 
@@ -24,12 +24,8 @@ export function Lightbox({
   onClose,
 }: LightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-
-  useEffect(() => {
-    if (isOpen) {
-      setCurrentIndex(initialIndex);
-    }
-  }, [isOpen, initialIndex]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const goToPrev = useCallback(() => {
     setCurrentIndex((prev) =>
@@ -42,6 +38,10 @@ export function Lightbox({
       prev === images.length - 1 ? 0 : prev + 1,
     );
   }, [images.length]);
+
+  const handleBackdropClick = useCallback(() => {
+    onClose();
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -57,6 +57,22 @@ export function Lightbox({
         case "ArrowRight":
           goToNext();
           break;
+        case "Tab":
+          if (dialogRef.current) {
+            const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+            );
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last?.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first?.focus();
+            }
+          }
+          break;
       }
     };
 
@@ -66,9 +82,15 @@ export function Lightbox({
 
   useEffect(() => {
     if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
+      const timer = setTimeout(() => {
+        dialogRef.current?.focus();
+      }, 0);
       document.body.style.overflow = "hidden";
       return () => {
+        clearTimeout(timer);
         document.body.style.overflow = "";
+        previousFocusRef.current?.focus();
       };
     }
   }, [isOpen]);
@@ -83,17 +105,22 @@ export function Lightbox({
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
-      onClick={onClose}
+      onClick={handleBackdropClick}
     >
       <div
-        className="relative flex flex-col items-center max-w-[90vw] max-h-[90vh]"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Image lightbox"
+        tabIndex={-1}
+        className="relative flex flex-col items-center max-w-[90vw] max-h-[90vh] outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         {hasMultiple && (
           <button
             type="button"
             onClick={goToPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors focus-visible:ring-2 focus-visible:ring-white"
             aria-label="Previous image"
           >
             <svg
@@ -128,11 +155,15 @@ export function Lightbox({
           </p>
         )}
 
+        <div className="mt-2 text-xs text-white/40">
+          {currentIndex + 1} / {images.length}
+        </div>
+
         {hasMultiple && (
           <button
             type="button"
             onClick={goToNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors focus-visible:ring-2 focus-visible:ring-white"
             aria-label="Next image"
           >
             <svg
