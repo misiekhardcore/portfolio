@@ -45,6 +45,18 @@ next-env.d.ts
 .forge/logs/
 .forge/worktrees/
 .forge/worktrees.json
-.pi/self-learning-memory/
+.pi/
 test-results/
 playwright-report/
+# Feature Forge runtime
+.forge/*
+!.forge/skills/
+!.forge/skills/**
+coverage-single/
+
+# pi coding agent runtime
+.pi
+
+# Environment overrides
+.env
+.env.local
