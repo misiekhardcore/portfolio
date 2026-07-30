@@ -21,18 +21,25 @@ function richTextToPlainText(node: unknown): string {
   return "";
 }
 
+async function getProjectBySlug(slug: string): Promise<Project | null> {
+  try {
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: "projects",
+      where: { slug: { equals: slug } },
+      depth: 2,
+    });
+    return (docs[0] as Project) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
-  const payload = await getPayload({ config });
-  const { docs } = await payload.find({
-    collection: "projects",
-    where: { slug: { equals: slug } },
-    depth: 2,
-  });
+  const project = await getProjectBySlug(slug);
 
-  if (!docs.length) notFound();
-
-  const project = docs[0] as Project;
+  if (!project) notFound();
 
   const firstImage = project.images?.[0];
   const media = firstImage?.image;
@@ -129,15 +136,9 @@ export default async function ProjectPage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const payload = await getPayload({ config });
-  const { docs } = await payload.find({
-    collection: "projects",
-    where: { slug: { equals: slug } },
-    depth: 1,
-  });
+  const project = await getProjectBySlug(slug);
 
-  if (!docs.length) return {};
-  const project = docs[0] as Project;
+  if (!project) return {};
 
   return {
     title: project.title,

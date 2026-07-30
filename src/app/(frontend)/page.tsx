@@ -66,14 +66,23 @@ const services = [
   },
 ];
 
+async function getFeaturedProjects(): Promise<Project[]> {
+  try {
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: "projects",
+      where: { featured: { equals: true } },
+      depth: 2,
+      limit: 3,
+    });
+    return docs as Project[];
+  } catch {
+    return [];
+  }
+}
+
 export default async function Home() {
-  const payload = await getPayload({ config });
-  const { docs: featuredProjects } = await payload.find({
-    collection: "projects",
-    where: { featured: { equals: true } },
-    depth: 2,
-    limit: 3,
-  });
+  const featuredProjects = await getFeaturedProjects();
 
   return (
     <>
@@ -133,7 +142,7 @@ export default async function Home() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredProjects.map((p) => (
-              <ProjectCard key={p.id} project={p as Project} />
+              <ProjectCard key={p.id} project={p} />
             ))}
           </div>
         )}

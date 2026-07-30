@@ -4,14 +4,23 @@ import { Section } from "@/components/section";
 import { ProjectCard } from "@/components/project-card";
 import type { Project } from "@/payload-types";
 
+async function getProjects(): Promise<Project[]> {
+  try {
+    const payload = await getPayload({ config });
+    const { docs } = await payload.find({
+      collection: "projects",
+      sort: "-date",
+      depth: 2,
+      limit: 50,
+    });
+    return docs as Project[];
+  } catch {
+    return [];
+  }
+}
+
 export default async function ProjectsPage() {
-  const payload = await getPayload({ config });
-  const { docs: projects } = await payload.find({
-    collection: "projects",
-    sort: "-date",
-    depth: 2,
-    limit: 50,
-  });
+  const projects = await getProjects();
 
   return (
     <Section
@@ -25,7 +34,7 @@ export default async function ProjectsPage() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
-            <ProjectCard key={p.id} project={p as Project} />
+            <ProjectCard key={p.id} project={p} />
           ))}
         </div>
       )}
