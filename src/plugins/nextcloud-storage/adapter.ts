@@ -3,21 +3,26 @@ import { putFile, deleteFile } from './webdav'
 
 interface CreateAdapterArgs { baseUrl: string; username: string; password: string; mediaRoot: string }
 
+function getFolder(doc: unknown): string {
+  return ((doc as Record<string, unknown>).folder as string) || 'projects'
+}
+
 export function createNextcloudAdapter(args: CreateAdapterArgs): Adapter {
-  return ({ collection: _, prefix: __ }): GeneratedAdapter => ({
+  return (): GeneratedAdapter => ({
     name: 'nextcloud',
     handleUpload: async ({ file, data }) => {
-      const folder = data.folder || 'projects'
+      const folder = getFolder(data)
       const remotePath = `${args.mediaRoot}/${folder}/${file.filename}`
       await putFile(args.baseUrl, args.username, args.password, remotePath, file.buffer)
       return data
     },
     handleDelete: async ({ doc, filename }) => {
-      const folder = doc.folder || 'projects'
+      const folder = getFolder(doc)
       const remotePath = `${args.mediaRoot}/${folder}/${filename}`
       await deleteFile(args.baseUrl, args.username, args.password, remotePath)
     },
-    generateURL: ({ filename, data }) => `/api/images/${data.folder || 'projects'}/${filename}`,
+    generateURL: ({ filename, data }) =>
+      `/api/images/${getFolder(data)}/${filename}`,
     staticHandler: () => new Response('Not found', { status: 404 }),
   })
 }
