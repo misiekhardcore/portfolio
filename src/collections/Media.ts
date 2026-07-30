@@ -19,7 +19,13 @@ export const Media: CollectionConfig = {
     },
     {
       name: 'folder',
-      type: 'text',
+      type: 'select',
+      defaultValue: 'projects',
+      options: [
+        { label: 'Projects', value: 'projects' },
+        { label: 'Site', value: 'site' },
+        { label: 'General', value: 'media' },
+      ],
       admin: {
         position: 'sidebar',
       },
