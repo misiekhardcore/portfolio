@@ -44,5 +44,6 @@ next-env.d.ts
 .forge/logs/
 .forge/worktrees/
 .forge/worktrees.json
-.pi/self-learning-memory/playwright-report/
+.pi/self-learning-memory/
 test-results/
+playwright-report/
