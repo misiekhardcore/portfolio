@@ -4,10 +4,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/section";
 import { ProjectImage } from "@/components/project-image";
-import { ProjectGallerySection } from "@/components/project-gallery-section";
+import { ProjectDetailContent } from "@/components/project-detail-content";
 import type { Project, Media } from "@/payload-types";
 import type { GalleryImage } from "@/components/masonry-gallery";
-import { RichText } from "@payloadcms/richtext-lexical/react";
+import { extractLexicalUploads } from "@/lib/extract-lexical-uploads";
 import { buildImagePath, extractLexicalText } from "@/lib/image-url";
 
 interface PageProps {
@@ -53,6 +53,8 @@ export default async function ProjectPage({ params }: PageProps) {
         caption: item.caption,
       };
     });
+
+  const inlineImages = extractLexicalUploads(project.description);
 
   return (
     <>
@@ -101,37 +103,13 @@ export default async function ProjectPage({ params }: PageProps) {
           Back to projects
         </Link>
 
-        <div className="grid gap-10 lg:grid-cols-3 lg:gap-16">
-          <div className="lg:col-span-2 text-wood-600 leading-relaxed">
-            {project.description ? (
-              <RichText data={project.description} />
-            ) : (
-              <p>No description available.</p>
-            )}
-          </div>
-
-          {project.details && project.details.length > 0 && (
-            <aside className="lg:col-span-1">
-              <dl className="sticky top-24 grid gap-4 rounded-2xl border border-wood-200 bg-wood-50 p-6">
-                {project.details.map((d) => (
-                  <div key={d.label}>
-                    <dt className="text-xs font-semibold uppercase tracking-wide text-wood-400">
-                      {d.label}
-                    </dt>
-                    <dd className="mt-1 text-sm text-wood-700">{d.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </aside>
-          )}
-        </div>
+        <ProjectDetailContent
+          description={project.description}
+          galleryImages={galleryImages}
+          inlineImages={inlineImages}
+          details={project.details}
+        />
       </Section>
-
-      {galleryImages.length > 0 && (
-        <Section title="Gallery">
-          <ProjectGallerySection images={galleryImages} />
-        </Section>
-      )}
 
       <Section className="text-center bg-wood-800 text-wood-100 rounded-none">
         <h2 className="text-3xl font-semibold tracking-tight">
