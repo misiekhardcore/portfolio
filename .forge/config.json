@@ -4,7 +4,10 @@
   "workspaceProvider": "git-worktree",
   "logDir": ".forge/logs",
   "taskTimeoutMs": 3600000,
-  "worktreeSymlinks": ["node_modules"],
+  "worktreeSymlinks": ["node_modules/", ".env.local"],
+
+  "agents": {},
+  "defaultAgent": {},
 
   "models": {
     "smart": { "model": "deepseek-v4-pro", "thinkingLevel": "xhigh" },
