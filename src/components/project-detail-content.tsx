@@ -82,12 +82,15 @@ export function ProjectDetailContent({
         </Section>
       )}
 
-      <Lightbox
-        images={allLightboxImages}
-        isOpen={lightboxOpen}
-        initialIndex={lightboxIndex}
-        onClose={() => setLightboxOpen(false)}
-      />
+      {lightboxOpen && (
+        <Lightbox
+          key={lightboxIndex}
+          images={allLightboxImages}
+          isOpen={lightboxOpen}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </>
   );
 }
