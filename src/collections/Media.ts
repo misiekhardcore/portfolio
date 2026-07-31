@@ -12,6 +12,9 @@ export const Media: CollectionConfig = {
     ],
     adminThumbnail: 'thumbnail',
   },
+  access: {
+    read: () => true,
+  },
   fields: [
     {
       name: 'alt',

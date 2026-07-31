@@ -133,6 +133,63 @@ test.describe('Project detail page', () => {
     await expect(sidebar).toBeVisible()
   })
 
+  test('inline images in rich text open lightbox', async ({ page }) => {
+    const found = await goToFirstProject(page)
+    test.skip(!found, 'No projects in database')
+
+    // Inline images inside the RichText description area
+    const descriptionArea = page.locator('[class*="lg:col-span-2"]')
+    const inlineImgs = descriptionArea.locator('img')
+    const inlineCount = await inlineImgs.count()
+    test.skip(inlineCount === 0, 'No inline images in rich text for this project')
+
+    await inlineImgs.first().click()
+
+    const lightbox = page.locator('.fixed.inset-0.z-50')
+    await expect(lightbox).toBeVisible()
+    await expect(lightbox.locator('img')).toBeVisible()
+
+    // Close the lightbox
+    await page.keyboard.press('Escape')
+    await expect(lightbox).not.toBeVisible()
+  })
+
+  test('lightbox shows merged gallery+inline images with correct ordering', async ({ page }) => {
+    const found = await goToFirstProject(page)
+    test.skip(!found, 'No projects in database')
+
+    const galleryImages = getGalleryImages(page)
+    const galleryCount = await galleryImages.count()
+
+    const descriptionArea = page.locator('[class*="lg:col-span-2"]')
+    const inlineImgs = descriptionArea.locator('img')
+    const inlineCount = await inlineImgs.count()
+
+    const totalImageCount = galleryCount + inlineCount
+    test.skip(totalImageCount < 2, 'Need at least 2 total images for ordering test')
+
+    // Open an inline image (click the first one)
+    if (inlineCount > 0) {
+      await inlineImgs.first().click()
+    } else {
+      await galleryImages.first().click()
+    }
+
+    const lightbox = page.locator('.fixed.inset-0.z-50')
+    await expect(lightbox).toBeVisible()
+
+    // Verify the counter shows the correct total
+    const counter = lightbox.locator('text=/\\d+ \\/ \\d+/')
+    await expect(counter).toBeVisible()
+    const counterText = await counter.textContent()
+    const match = counterText?.match(/(\d+) \/ (\d+)/)
+    expect(match).not.toBeNull()
+    const totalFromCounter = parseInt(match![2], 10)
+    expect(totalFromCounter).toBe(totalImageCount)
+
+    await page.keyboard.press('Escape')
+  })
+
   test('body scroll is locked when lightbox is open', async ({ page }) => {
     const found = await goToFirstProject(page)
     test.skip(!found, 'No projects in database')

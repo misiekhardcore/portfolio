@@ -1,0 +1,19 @@
+{
+  "logLevel": "debug",
+  "logPrefix": "forge",
+  "workspaceProvider": "git-worktree",
+  "logDir": ".forge/logs",
+  "taskTimeoutMs": 3600000,
+  "worktreeSymlinks": ["node_modules"],
+
+  "models": {
+    "smart": { "model": "deepseek-v4-pro", "thinkingLevel": "xhigh" },
+    "medium": { "model": "deepseek-v4-flash", "thinkingLevel": "high" },
+    "dumb": { "model": "deepseek-v4-flash", "thinkingLevel": "medium" }
+  },
+  "defaultModel": "medium",
+
+  "dev": {
+    "enabled": true
+  }
+}
