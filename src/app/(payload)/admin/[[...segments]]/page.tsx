@@ -1,9 +1,7 @@
 import config from '@payload-config'
 import { generatePageMetadata, RootPage } from '@payloadcms/next/views'
-import type { ImportMap } from 'payload'
 import React from 'react'
-
-const importMap: ImportMap = {}
+import { importMap } from '@/app/(payload)/admin/importMap.js'
 
 type Args = {
   params: Promise<{ segments: string[] }>
@@ -17,7 +15,14 @@ const Page = async ({ params, searchParams }: Args) => {
   const resolvedParams = await params
   const resolvedSearchParams = await searchParams
 
-  return <RootPage config={config} importMap={importMap} params={Promise.resolve(resolvedParams)} searchParams={Promise.resolve(resolvedSearchParams)} />
+  return (
+    <RootPage
+      config={config}
+      importMap={importMap}
+      params={Promise.resolve(resolvedParams)}
+      searchParams={Promise.resolve(resolvedSearchParams)}
+    />
+  )
 }
 
 export default Page
