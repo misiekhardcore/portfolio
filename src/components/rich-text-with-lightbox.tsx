@@ -21,8 +21,8 @@ export function RichTextWithLightbox({
     const filenameMap = new Map<string, number>();
     inlineImages.forEach((img, index) => {
       srcMap.set(img.src, index);
-      const filename = img.src.split("/").pop();
-      if (filename) filenameMap.set(filename, index);
+      const raw = img.src.split("/").pop();
+      if (raw) filenameMap.set(decodeURIComponent(raw), index);
     });
     return { srcToIndex: srcMap, filenameToIndex: filenameMap };
   }, [inlineImages]);
@@ -56,7 +56,7 @@ export function RichTextWithLightbox({
       if (index === undefined) {
         const srcToCheck = rawSrc || img.src;
         const filename = srcToCheck.split("/").pop()?.split("?")[0];
-        if (filename) index = filenameToIndex.get(filename);
+        if (filename) index = filenameToIndex.get(decodeURIComponent(filename));
       }
 
       if (index !== undefined) {
