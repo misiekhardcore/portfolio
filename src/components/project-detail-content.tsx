@@ -31,10 +31,23 @@ export function ProjectDetailContent({
     [galleryImages],
   );
 
-  const allLightboxImages = useMemo(
-    () => [...galleryLightboxImages, ...inlineImages],
-    [galleryLightboxImages, inlineImages],
-  );
+  const allLightboxImages = useMemo(() => {
+    const seen = new Set<string>();
+    const result: LightboxImage[] = [];
+    for (const img of inlineImages) {
+      if (!seen.has(img.src)) {
+        seen.add(img.src);
+        result.push(img);
+      }
+    }
+    for (const img of galleryLightboxImages) {
+      if (!seen.has(img.src)) {
+        seen.add(img.src);
+        result.push(img);
+      }
+    }
+    return result;
+  }, [galleryLightboxImages, inlineImages]);
 
   return (
     <>
@@ -45,7 +58,7 @@ export function ProjectDetailContent({
               data={description}
               inlineImages={inlineImages}
               onImageClick={(inlineIdx) => {
-                setLightboxIndex(galleryLightboxImages.length + inlineIdx);
+                setLightboxIndex(inlineIdx);
                 setLightboxOpen(true);
               }}
             />
@@ -75,8 +88,14 @@ export function ProjectDetailContent({
           <MasonryGallery
             images={galleryImages}
             onImageClick={(idx) => {
-              setLightboxIndex(idx);
-              setLightboxOpen(true);
+              const clicked = toLightboxImages([galleryImages[idx]])[0];
+              const lightboxIdx = clicked
+                ? allLightboxImages.findIndex((img) => img.src === clicked.src)
+                : -1;
+              if (lightboxIdx >= 0) {
+                setLightboxIndex(lightboxIdx);
+                setLightboxOpen(true);
+              }
             }}
           />
         </Section>
