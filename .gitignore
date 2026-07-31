@@ -41,21 +41,20 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+test-results/
+playwright-report/
 
+# Feature Forge runtime
 .forge/logs/
 .forge/worktrees/
 .forge/worktrees.json
-.pi/
-test-results/
-playwright-report/
-# Feature Forge runtime
-.forge/*
 !.forge/skills/
 !.forge/skills/**
 coverage-single/
 
 # pi coding agent runtime
-.pi
+.pi/
+.lavish/
 
 # Environment overrides
 .env
