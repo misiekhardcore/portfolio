@@ -1,9 +1,8 @@
 import config from '@payload-config'
 import '@payloadcms/next/css'
 import type { ServerFunctionClient } from 'payload'
-import { handleServerFunctions } from '@payloadcms/next/layouts'
+import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
-import { AdminProviders } from './admin-providers'
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
 
@@ -15,9 +14,9 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
-  <AdminProviders config={config} importMap={importMap} serverFunction={serverFunction}>
+  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
     {children}
-  </AdminProviders>
+  </RootLayout>
 )
 
 export default Layout

@@ -48,9 +48,8 @@ export default async function RootLayout({
               '(function(){try{var t=document.cookie.split("; ").find(function(r){return r.indexOf("payload-theme=")===0});var v=t?t.split("=")[1]:null;var m=v==="light"||v==="dark"?v:window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",m)}catch(e){}})()',
           }}
         />
-        <style>{`@layer payload-default, payload;`}</style>
       </head>
-      <body className="min-h-full bg-wood-50 text-wood-800">
+      <body className="min-h-full bg-wood-50 text-wood-800" suppressHydrationWarning>
         {children}
       </body>
     </html>
