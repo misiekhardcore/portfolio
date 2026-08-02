@@ -9,6 +9,9 @@ import { Media } from './collections/Media'
 import { nextcloudStorage } from './plugins/nextcloud-storage'
 
 export default buildConfig({
+  admin: {
+    suppressHydrationWarning: true,
+  },
   typescript: {
     outputFile: 'src/payload-types.ts',
   },

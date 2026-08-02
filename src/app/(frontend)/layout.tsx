@@ -7,10 +7,14 @@ export default function FrontendLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-full flex flex-col">
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
+    <body
+      className="min-h-full bg-wood-50 text-wood-800"
+    >
+      <div className="min-h-full flex flex-col">
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
+    </body>
   );
 }
