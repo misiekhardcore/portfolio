@@ -9,7 +9,9 @@ export function Footer() {
           </p>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-wood-50 uppercase tracking-wide mb-3">Services</h4>
+          <h4 className="text-sm font-semibold text-wood-50 uppercase tracking-wide mb-3">
+            Services
+          </h4>
           <ul className="space-y-1 text-sm text-wood-300">
             <li>Custom Furniture</li>
             <li>Kitchen Renovations</li>
@@ -18,7 +20,9 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-wood-50 uppercase tracking-wide mb-3">Contact</h4>
+          <h4 className="text-sm font-semibold text-wood-50 uppercase tracking-wide mb-3">
+            Contact
+          </h4>
           <ul className="space-y-1 text-sm text-wood-300">
             <li>hello@yourcompany.com</li>
             <li>+48 123 456 789</li>

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { MasonryGallery } from "@/components/masonry-gallery";
-import { Lightbox } from "@/components/lightbox";
-import type { LightboxImage } from "@/components/lightbox";
-import type { GalleryImage } from "@/components/masonry-gallery";
-import { RichTextWithLightbox } from "@/components/rich-text-with-lightbox";
-import { Section } from "@/components/section";
-import { toLightboxImages } from "@/components/project-gallery-section";
-import type { SerializedEditorState } from "lexical";
+import { useState, useMemo } from 'react';
+import { MasonryGallery } from '@/components/masonry-gallery';
+import { Lightbox } from '@/components/lightbox';
+import type { LightboxImage } from '@/components/lightbox';
+import type { GalleryImage } from '@/components/masonry-gallery';
+import { RichTextWithLightbox } from '@/components/rich-text-with-lightbox';
+import { Section } from '@/components/section';
+import { toLightboxImages } from '@/components/project-gallery-section';
+import type { SerializedEditorState } from 'lexical';
 
 interface ProjectDetailContentProps {
   description: SerializedEditorState | null | undefined;
@@ -26,10 +26,7 @@ export function ProjectDetailContent({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  const galleryLightboxImages = useMemo(
-    () => toLightboxImages(galleryImages),
-    [galleryImages],
-  );
+  const galleryLightboxImages = useMemo(() => toLightboxImages(galleryImages), [galleryImages]);
 
   const allLightboxImages = useMemo(() => {
     const seen = new Set<string>();

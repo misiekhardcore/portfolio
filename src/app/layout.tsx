@@ -1,27 +1,27 @@
-import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { Geist, Geist_Mono } from "next/font/google";
-import configPromise from "@payload-config";
-import { rtlLanguages } from "@payloadcms/translations";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { Geist, Geist_Mono } from 'next/font/google';
+import configPromise from '@payload-config';
+import { rtlLanguages } from '@payloadcms/translations';
+import './globals.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "YourCompany — Woodworking & Renovations",
-    template: "%s | YourCompany",
+    default: 'YourCompany — Woodworking & Renovations',
+    template: '%s | YourCompany',
   },
   description:
-    "Expert woodworking and home renovation craftsmanship. Custom furniture, kitchen refits, decking, and complete interior transformations.",
+    'Expert woodworking and home renovation craftsmanship. Custom furniture, kitchen refits, decking, and complete interior transformations.',
 };
 
 export default async function RootLayout({
@@ -30,20 +30,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const lang = cookieStore.get("payload-lng")?.value;
-  const dir =
-    lang && (rtlLanguages as readonly string[]).includes(lang)
-      ? "RTL"
-      : "LTR";
+  const lang = cookieStore.get('payload-lng')?.value;
+  const dir = lang && (rtlLanguages as readonly string[]).includes(lang) ? 'RTL' : 'LTR';
   const config = await configPromise;
 
   return (
     <html
       lang="en"
       dir={dir}
-      suppressHydrationWarning={
-        config?.admin?.suppressHydrationWarning ?? true
-      }
+      suppressHydrationWarning={config?.admin?.suppressHydrationWarning ?? true}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       {children}

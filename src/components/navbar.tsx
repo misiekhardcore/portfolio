@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/projects", label: "Projects" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 export function Navbar() {
@@ -32,9 +32,7 @@ export function Navbar() {
               <Link
                 href={href}
                 className={`text-sm font-medium transition-colors ${
-                  pathname === href
-                    ? "text-accent"
-                    : "text-wood-600 hover:text-wood-800"
+                  pathname === href ? 'text-accent' : 'text-wood-600 hover:text-wood-800'
                 }`}
               >
                 {label}
@@ -50,12 +48,15 @@ export function Navbar() {
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            {open ? (
-              <path d="M6 6l12 12M18 6L6 18" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            )}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
           </svg>
         </button>
       </nav>
@@ -68,9 +69,7 @@ export function Navbar() {
               <Link
                 href={href}
                 className={`block py-2 text-sm font-medium transition-colors ${
-                  pathname === href
-                    ? "text-accent"
-                    : "text-wood-600 hover:text-wood-800"
+                  pathname === href ? 'text-accent' : 'text-wood-600 hover:text-wood-800'
                 }`}
                 onClick={() => setOpen(false)}
               >

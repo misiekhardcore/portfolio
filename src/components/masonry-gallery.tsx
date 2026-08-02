@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ProjectImage } from "./project-image";
-import { buildImagePath } from "@/lib/image-url";
+import { useState } from 'react';
+import { ProjectImage } from './project-image';
+import { buildImagePath } from '@/lib/image-url';
 
 export interface GalleryImage {
   id?: string | null;
@@ -16,19 +16,15 @@ interface MasonryGalleryProps {
   onImageClick?: (index: number) => void;
 }
 
-function getImagePath(imageObj: GalleryImage["image"]): string | null {
+function getImagePath(imageObj: GalleryImage['image']): string | null {
   return buildImagePath(imageObj.filename, imageObj.folder);
 }
 
-function getImageAlt(imageObj: GalleryImage["image"]): string {
-  return imageObj.alt || imageObj.filename || "Gallery image";
+function getImageAlt(imageObj: GalleryImage['image']): string {
+  return imageObj.alt || imageObj.filename || 'Gallery image';
 }
 
-export function MasonryGallery({
-  images,
-  pageSize = 8,
-  onImageClick,
-}: MasonryGalleryProps) {
+export function MasonryGallery({ images, pageSize = 8, onImageClick }: MasonryGalleryProps) {
   const [visibleCount, setVisibleCount] = useState(pageSize);
 
   if (!images || images.length === 0) {
@@ -52,10 +48,10 @@ export function MasonryGallery({
               key={item.id ?? i}
               className="break-inside-avoid overflow-hidden rounded-xl border border-wood-200 bg-white group cursor-pointer hover:shadow-md transition-shadow"
               onClick={() => onImageClick?.(globalIndex)}
-              role={onImageClick ? "button" : undefined}
+              role={onImageClick ? 'button' : undefined}
               tabIndex={onImageClick ? 0 : undefined}
               onKeyDown={(e) => {
-                if (onImageClick && (e.key === "Enter" || e.key === " ")) {
+                if (onImageClick && (e.key === 'Enter' || e.key === ' ')) {
                   e.preventDefault();
                   onImageClick(globalIndex);
                 }
@@ -91,11 +87,7 @@ export function MasonryGallery({
         <div className="mt-6 text-center">
           <button
             type="button"
-            onClick={() =>
-              setVisibleCount((prev) =>
-                Math.min(prev + pageSize, images.length)
-              )
-            }
+            onClick={() => setVisibleCount((prev) => Math.min(prev + pageSize, images.length))}
             className="inline-flex items-center px-5 py-2.5 rounded-full border border-wood-300 text-wood-700 text-sm font-medium hover:bg-wood-50 transition-colors"
           >
             +{remaining} more

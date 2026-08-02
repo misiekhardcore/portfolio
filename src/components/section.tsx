@@ -6,7 +6,7 @@ interface SectionProps {
   className?: string;
 }
 
-export function Section({ id, title, subtitle, children, className = "" }: SectionProps) {
+export function Section({ id, title, subtitle, children, className = '' }: SectionProps) {
   return (
     <section id={id} className={`py-20 px-6 ${className}`}>
       <div className="mx-auto max-w-6xl">
@@ -15,9 +15,7 @@ export function Section({ id, title, subtitle, children, className = "" }: Secti
             <h2 className="text-3xl font-semibold tracking-tight text-wood-800 sm:text-4xl">
               {title}
             </h2>
-            {subtitle && (
-              <p className="mt-3 text-wood-500 max-w-xl mx-auto">{subtitle}</p>
-            )}
+            {subtitle && <p className="mt-3 text-wood-500 max-w-xl mx-auto">{subtitle}</p>}
           </div>
         )}
         {children}

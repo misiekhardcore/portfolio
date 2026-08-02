@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 function slugify(text: string): string {
   return text
@@ -6,7 +6,7 @@ function slugify(text: string): string {
     .trim()
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 export const Projects: CollectionConfig = {
@@ -19,7 +19,7 @@ export const Projects: CollectionConfig = {
       ({ data, operation }) => {
         if (operation === 'create' || operation === 'update') {
           if (data?.title && !data?.slug) {
-            data.slug = slugify(data.title)
+            data.slug = slugify(data.title);
           }
         }
       },
@@ -33,9 +33,18 @@ export const Projects: CollectionConfig = {
       unique: true,
       admin: { position: 'sidebar' },
     },
-    { name: 'category', type: 'relationship', relationTo: 'categories', admin: { position: 'sidebar' } },
+    {
+      name: 'category',
+      type: 'relationship',
+      relationTo: 'categories',
+      admin: { position: 'sidebar' },
+    },
     { name: 'description', type: 'richText' },
-    { name: 'date', type: 'date', admin: { position: 'sidebar', date: { pickerAppearance: 'monthOnly' } } },
+    {
+      name: 'date',
+      type: 'date',
+      admin: { position: 'sidebar', date: { pickerAppearance: 'monthOnly' } },
+    },
     { name: 'featured', type: 'checkbox', defaultValue: false, admin: { position: 'sidebar' } },
     {
       name: 'images',
@@ -54,4 +63,4 @@ export const Projects: CollectionConfig = {
       ],
     },
   ],
-}
+};

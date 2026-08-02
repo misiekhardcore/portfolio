@@ -1,14 +1,14 @@
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Section } from "@/components/section";
-import { ProjectImage } from "@/components/project-image";
-import { ProjectDetailContent } from "@/components/project-detail-content";
-import type { Project, Media } from "@/payload-types";
-import type { GalleryImage } from "@/components/masonry-gallery";
-import { extractLexicalUploads } from "@/lib/extract-lexical-uploads";
-import { buildImagePath, extractLexicalText } from "@/lib/image-url";
+import { getPayload } from 'payload';
+import config from '@payload-config';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { Section } from '@/components/section';
+import { ProjectImage } from '@/components/project-image';
+import { ProjectDetailContent } from '@/components/project-detail-content';
+import type { Project, Media } from '@/payload-types';
+import type { GalleryImage } from '@/components/masonry-gallery';
+import { extractLexicalUploads } from '@/lib/extract-lexical-uploads';
+import { buildImagePath, extractLexicalText } from '@/lib/image-url';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -18,7 +18,7 @@ async function getProjectBySlug(slug: string): Promise<Project | null> {
   try {
     const payload = await getPayload({ config });
     const { docs } = await payload.find({
-      collection: "projects",
+      collection: 'projects',
       where: { slug: { equals: slug } },
       depth: 2,
     });
@@ -36,15 +36,17 @@ export default async function ProjectPage({ params }: PageProps) {
 
   const firstImage = project.images?.[0];
   const heroMedia = firstImage?.image;
-  const heroMediaObj: Media | null = heroMedia && typeof heroMedia === "object" ? heroMedia : null;
+  const heroMediaObj: Media | null = heroMedia && typeof heroMedia === 'object' ? heroMedia : null;
   const heroPath = buildImagePath(heroMediaObj?.filename, heroMediaObj?.folder);
   const heroAlt = heroMediaObj?.alt || project.title;
   const categoryName =
-    typeof project.category === "object" && project.category ? project.category.name : "Uncategorized";
+    typeof project.category === 'object' && project.category
+      ? project.category.name
+      : 'Uncategorized';
 
   const galleryImages: GalleryImage[] = (project.images ?? [])
     .slice(1)
-    .filter((item) => typeof item.image === "object" && item.image?.filename)
+    .filter((item) => typeof item.image === 'object' && item.image?.filename)
     .map((item) => {
       const img = item.image as Media;
       return {
@@ -112,12 +114,9 @@ export default async function ProjectPage({ params }: PageProps) {
       </Section>
 
       <Section className="text-center bg-wood-800 text-wood-100 rounded-none">
-        <h2 className="text-3xl font-semibold tracking-tight">
-          Have a similar project in mind?
-        </h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Have a similar project in mind?</h2>
         <p className="mt-4 max-w-lg mx-auto text-wood-300">
-          We&rsquo;d love to hear about it. Reach out and let&rsquo;s discuss
-          how we can help.
+          We&rsquo;d love to hear about it. Reach out and let&rsquo;s discuss how we can help.
         </p>
         <Link
           href="/contact"
@@ -138,8 +137,6 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: project.title,
-    description: project.description
-      ? extractLexicalText(project.description).slice(0, 160)
-      : "",
+    description: project.description ? extractLexicalText(project.description).slice(0, 160) : '',
   };
 }

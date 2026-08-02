@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import Image from 'next/image';
 
 export interface LightboxImage {
   src: string;
@@ -17,26 +17,17 @@ interface LightboxProps {
   onClose: () => void;
 }
 
-export function Lightbox({
-  images,
-  isOpen,
-  initialIndex,
-  onClose,
-}: LightboxProps) {
+export function Lightbox({ images, isOpen, initialIndex, onClose }: LightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const goToPrev = useCallback(() => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1,
-    );
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   }, [images.length]);
 
   const goToNext = useCallback(() => {
-    setCurrentIndex((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1,
-    );
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   }, [images.length]);
 
   const handleBackdropClick = useCallback(() => {
@@ -48,19 +39,19 @@ export function Lightbox({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case "Escape":
+        case 'Escape':
           onClose();
           break;
-        case "ArrowLeft":
+        case 'ArrowLeft':
           goToPrev();
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           goToNext();
           break;
-        case "Tab":
+        case 'Tab':
           if (dialogRef.current) {
             const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
             );
             const first = focusable[0];
             const last = focusable[focusable.length - 1];
@@ -76,8 +67,8 @@ export function Lightbox({
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose, goToPrev, goToNext]);
 
   useEffect(() => {
@@ -86,10 +77,10 @@ export function Lightbox({
       const timer = setTimeout(() => {
         dialogRef.current?.focus();
       }, 0);
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       return () => {
         clearTimeout(timer);
-        document.body.style.overflow = "";
+        document.body.style.overflow = '';
         previousFocusRef.current?.focus();
       };
     }
@@ -150,9 +141,7 @@ export function Lightbox({
         </div>
 
         {currentImage.caption && (
-          <p className="mt-4 text-sm text-white/80 text-center">
-            {currentImage.caption}
-          </p>
+          <p className="mt-4 text-sm text-white/80 text-center">{currentImage.caption}</p>
         )}
 
         <div className="mt-2 text-xs text-white/40">
@@ -183,6 +172,6 @@ export function Lightbox({
         )}
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }

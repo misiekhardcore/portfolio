@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { ProjectImage } from "./project-image";
-import type { Project, Media } from "@/payload-types";
+import Link from 'next/link';
+import { ProjectImage } from './project-image';
+import type { Project, Media } from '@/payload-types';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,9 +9,9 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   const firstImage = project.images?.[0];
   const media = firstImage?.image;
-  const mediaObj: Media | null = media && typeof media === "object" ? media : null;
+  const mediaObj: Media | null = media && typeof media === 'object' ? media : null;
   const imagePath = mediaObj?.filename
-    ? `${mediaObj.folder || "projects"}/${mediaObj.filename}`
+    ? `${mediaObj.folder || 'projects'}/${mediaObj.filename}`
     : undefined;
   const imageAlt = mediaObj?.alt || project.title;
 
@@ -37,7 +37,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </div>
       <div className="p-5">
         <span className="text-xs font-medium uppercase tracking-wide text-accent">
-          {typeof project.category === "object" && project.category ? project.category.name : "Uncategorized"}
+          {typeof project.category === 'object' && project.category
+            ? project.category.name
+            : 'Uncategorized'}
         </span>
         <h3 className="mt-1 text-lg font-semibold text-wood-800 group-hover:text-wood-600 transition-colors">
           {project.title}

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import type { SerializedEditorState } from "lexical";
-import { RichText } from "@payloadcms/richtext-lexical/react";
-import { useCallback, useMemo } from "react";
-import type { LightboxImage } from "@/components/lightbox";
+import type { SerializedEditorState } from 'lexical';
+import { RichText } from '@payloadcms/richtext-lexical/react';
+import { useCallback, useMemo } from 'react';
+import type { LightboxImage } from '@/components/lightbox';
 
 interface RichTextWithLightboxProps {
   data: SerializedEditorState;
@@ -21,7 +21,7 @@ export function RichTextWithLightbox({
     const filenameMap = new Map<string, number>();
     inlineImages.forEach((img, index) => {
       srcMap.set(img.src, index);
-      const raw = img.src.split("/").pop();
+      const raw = img.src.split('/').pop();
       if (raw) filenameMap.set(decodeURIComponent(raw), index);
     });
     return { srcToIndex: srcMap, filenameToIndex: filenameMap };
@@ -29,17 +29,15 @@ export function RichTextWithLightbox({
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      const picture = (e.target as HTMLElement).closest("picture");
-      const img = picture
-        ? picture.querySelector("img")
-        : (e.target as HTMLElement).closest("img");
+      const picture = (e.target as HTMLElement).closest('picture');
+      const img = picture ? picture.querySelector('img') : (e.target as HTMLElement).closest('img');
 
       if (!(img instanceof HTMLImageElement)) return;
 
       let index: number | undefined;
 
       // Try the raw src attribute first (relative URL from inlineImages)
-      const rawSrc = img.getAttribute("src");
+      const rawSrc = img.getAttribute('src');
       index = rawSrc ? srcToIndex.get(rawSrc) : undefined;
 
       // Fall back to the resolved src (absolute URL, try pathname match)
@@ -55,7 +53,7 @@ export function RichTextWithLightbox({
       // Fall back to matching by filename (handles mismatched URL prefixes)
       if (index === undefined) {
         const srcToCheck = rawSrc || img.src;
-        const filename = srcToCheck.split("/").pop()?.split("?")[0];
+        const filename = srcToCheck.split('/').pop()?.split('?')[0];
         if (filename) index = filenameToIndex.get(decodeURIComponent(filename));
       }
 
@@ -63,7 +61,7 @@ export function RichTextWithLightbox({
         onImageClick(index);
       }
     },
-    [srcToIndex, filenameToIndex, onImageClick],
+    [srcToIndex, filenameToIndex, onImageClick]
   );
 
   return (

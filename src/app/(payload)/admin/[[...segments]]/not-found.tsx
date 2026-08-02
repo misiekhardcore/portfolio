@@ -1,26 +1,26 @@
-import config from '@payload-config'
-import { NotFoundPage } from '@payloadcms/next/views'
-import type { Metadata } from 'next'
-import React from 'react'
-import { importMap } from '@/app/(payload)/admin/importMap.js'
+import config from '@payload-config';
+import { NotFoundPage } from '@payloadcms/next/views';
+import type { Metadata } from 'next';
+import React from 'react';
+import { importMap } from '@/app/(payload)/admin/importMap.js';
 
 type Args = {
-  params: Promise<{ segments: string[] }>
-  searchParams: Promise<Record<string, string | string[]>>
-}
+  params: Promise<{ segments: string[] }>;
+  searchParams: Promise<Record<string, string | string[]>>;
+};
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const cfg = await config
+  const cfg = await config;
   return {
     title: 'Not Found',
     description: 'Page not found',
     metadataBase: new URL(cfg.serverURL || 'http://localhost:3000'),
-  }
-}
+  };
+};
 
 const NotFound = async ({ params, searchParams }: Args) => {
-  const resolvedParams = await params
-  const resolvedSearchParams = await searchParams
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
 
   return (
     <NotFoundPage
@@ -29,7 +29,7 @@ const NotFound = async ({ params, searchParams }: Args) => {
       params={Promise.resolve(resolvedParams)}
       searchParams={Promise.resolve(resolvedSearchParams)}
     />
-  )
-}
+  );
+};
 
-export default NotFound
+export default NotFound;

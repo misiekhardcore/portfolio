@@ -1,12 +1,12 @@
-import { buildConfig } from 'payload'
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
-import sharp from 'sharp'
-import { Users } from './collections/Users'
-import { Categories } from './collections/Categories'
-import { Projects } from './collections/Projects'
-import { Media } from './collections/Media'
-import { nextcloudStorage } from './plugins/nextcloud-storage'
+import { buildConfig } from 'payload';
+import { postgresAdapter } from '@payloadcms/db-postgres';
+import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical';
+import sharp from 'sharp';
+import { Users } from './collections/Users';
+import { Categories } from './collections/Categories';
+import { Projects } from './collections/Projects';
+import { Media } from './collections/Media';
+import { nextcloudStorage } from './plugins/nextcloud-storage';
 
 export default buildConfig({
   admin: {
@@ -48,4 +48,4 @@ export default buildConfig({
   }),
   sharp,
   collections: [Users, Categories, Projects, Media],
-})
+});

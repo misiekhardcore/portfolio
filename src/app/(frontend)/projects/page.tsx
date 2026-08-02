@@ -1,15 +1,15 @@
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { Section } from "@/components/section";
-import { ProjectCard } from "@/components/project-card";
-import type { Project } from "@/payload-types";
+import { getPayload } from 'payload';
+import config from '@payload-config';
+import { Section } from '@/components/section';
+import { ProjectCard } from '@/components/project-card';
+import type { Project } from '@/payload-types';
 
 async function getProjects(): Promise<Project[]> {
   try {
     const payload = await getPayload({ config });
     const { docs } = await payload.find({
-      collection: "projects",
-      sort: "-date",
+      collection: 'projects',
+      sort: '-date',
       depth: 2,
       limit: 50,
     });
